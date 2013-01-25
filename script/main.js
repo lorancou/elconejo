@@ -1,4 +1,5 @@
 var stage;
+var wresker;
 
 function init() {
 	// get a reference to the canvas we'll be working with:
@@ -20,9 +21,13 @@ function init() {
 
 	createjs.Ticker.setInterval(window.requestAnimationFrame);
 	createjs.Ticker.addListener(update);
+
+	wresler = new wresler();
 }
 
 function update() {
+
+	wresler.update();
 
 	// call update on the stage to make it render the current display list to the canvas:
 	stage.update();
