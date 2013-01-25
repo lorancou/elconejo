@@ -2,7 +2,6 @@ var KEYCODE_LEFT = 37;
 var KEYCODE_UP = 38;
 var KEYCODE_RIGHT = 39;
 var KEYCODE_DOWN = 40;
-var MOVE_SPEED = 256;
 
 var wresler = function(stage) {
 
@@ -38,17 +37,18 @@ var wresler = function(stage) {
 
 wresler.prototype.update = function(dt) {
 
+    var move = WRESLER_MOVE_SPEED * dt / 1000;
     if (this.lfHeld) {
-        this.bitmapAnimation.x -= MOVE_SPEED * dt / 1000;
+        this.bitmapAnimation.x -= move;
     }
     if (this.rtHeld) {
-        this.bitmapAnimation.x += MOVE_SPEED * dt / 1000;
+        this.bitmapAnimation.x += move;
     }
     if (this.upHeld) {
-        this.bitmapAnimation.y -= MOVE_SPEED * dt / 1000;
+        this.bitmapAnimation.y -= move;
     }
     if (this.dwHeld) {
-        this.bitmapAnimation.y += MOVE_SPEED * dt / 1000;
+        this.bitmapAnimation.y += move;
     }
 }
 

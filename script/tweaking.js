@@ -1,0 +1,1 @@
+var WRESLER_MOVE_SPEED = 256;
