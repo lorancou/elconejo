@@ -1,9 +1,11 @@
+var stage;
+
 function init() {
 	// get a reference to the canvas we'll be working with:
 	var canvas = document.getElementById("testCanvas");
 
 	// create a stage object to work with the canvas. This is the top level node in the display list:
-	var stage = new createjs.Stage(canvas);
+	stage = new createjs.Stage(canvas);
 
 	// Create a new Text object:
 	var text = new createjs.Text("Hello World!", "36px Arial", "#000");
@@ -15,6 +17,12 @@ function init() {
 	// position the text on screen, relative to the stage coordinates:
 	text.x = 0;
 	text.y = 0;
+
+	createjs.Ticker.setInterval(window.requestAnimationFrame);
+	createjs.Ticker.addListener(update);
+}
+
+function update() {
 
 	// call update on the stage to make it render the current display list to the canvas:
 	stage.update();
