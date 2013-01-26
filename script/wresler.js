@@ -22,6 +22,8 @@ var Wresler = function() {
     this.dir = DIR_DW;
     this.state = STATE_RUN;
 
+    this.punchbox = null;
+
     var ss = new createjs.SpriteSheet({
         "frames": {
             "width": WRESLER_SIZE,
@@ -68,9 +70,24 @@ Wresler.prototype.update = function(dt) {
     } break;
 
     case STATE_PUNCH: {
-        // back to run when done punching
-        if (this.anim.currentAnimationFrame == 3) { // 4-1
+
+        if (this.anim.currentAnimationFrame < 3) {
+
+            // detect hits
+            this.punchbox = new createjs.Rectangle(
+                this.anim.x + WRESLER_PUNCHBOX[this.dir].x,
+                this.anim.y + WRESLER_PUNCHBOX[this.dir].y,
+                WRESLER_PUNCHBOX[this.dir].width,
+                WRESLER_PUNCHBOX[this.dir].height
+                );
+
+        } else {
+
+            this.punchbox = null;
+
+            // back to run when done punching
             this.setState(STATE_RUN);
+
         }
     } break;
 

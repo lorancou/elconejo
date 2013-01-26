@@ -1,5 +1,6 @@
 "use strict";
 
+var debug = getParameterByName("debug") == "true" ? true : false;
 var stage;
 var room;
 var wresler;
@@ -61,6 +62,25 @@ function draw() {
 
 	stage.addChild(room.bitmap);
 	stage.addChild(wresler.anim);
+
+	var g = new createjs.Graphics();
+	g.setStrokeStyle(1);
+
+	if (debug) {
+		var g = new createjs.Graphics();
+		if (wresler.punchbox) {
+			g.setStrokeStyle(1);
+			g.beginStroke(createjs.Graphics.getRGB(255,0,0));
+			g.drawRect(
+				wresler.punchbox.x,
+				wresler.punchbox.y,
+				wresler.punchbox.width,
+				wresler.punchbox.height
+				);
+			var s = new createjs.Shape(g);
+			stage.addChild(s);
+		}
+	}
 
 	// call update on the stage to make it render the current display list to the canvas:
 	stage.clear();
