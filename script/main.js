@@ -2,17 +2,23 @@
 
 var debug = getParameterByName("debug") == "true" ? true : false;
 var stage;
+var score;
 var room;
 var wresler;
 var skulls;
+
+var scoreDiv; // TEMP
 
 function init() {
 	
 	// get a reference to the canvas we'll be working with:
 	var canvas = document.getElementById("canvas");
+	scoreDiv = document.getElementById("score");
 
 	// create a stage object to work with the canvas. This is the top level node in the display list:
 	stage = new createjs.Stage(canvas);
+
+	score = 0;
 
 	// create a room
 	room = new Room();
@@ -41,6 +47,7 @@ function update(dt) {
 
 	room.update();
 
+	// room change
 	if (wresler.x < 0) {
 		room.change((room.index + 4 - 1)%4);
 		wresler.x = 320;
@@ -63,7 +70,26 @@ function update(dt) {
 	wresler.update(dt);
 
 	for (var i = 0; i<10; ++i) {
+		if (!skulls[i]) {
+			continue;
+		}
+
 		skulls[i].update(dt);
+
+		// hits
+		if (wresler.punchBox) {
+	        var hitBox = new createjs.Rectangle(
+	            skulls[i].anim.x + SKULL_HITBOX.x,
+	            skulls[i].anim.y + SKULL_HITBOX.y,
+	            SKULL_HITBOX.width,
+	            SKULL_HITBOX.height
+	            );
+	        if (rectIntersect(hitBox, wresler.punchBox)) {
+	        	skulls[i] = null;
+	        	score += 1;
+	        	scoreDiv.innerHTML = score;
+	        }
+	    }
 	}
 
 	draw();
@@ -74,6 +100,9 @@ function draw() {
 	stage.addChild(room.bitmap);
 
 	for (var i = 0; i<10; ++i) {
+		if (!skulls[i]) {
+			continue;
+		}
 		stage.addChild(skulls[i].anim);
 	}
 
@@ -81,14 +110,14 @@ function draw() {
 
 	if (debug) {
 		var g = new createjs.Graphics();
-		if (wresler.punchbox) {
+		if (wresler.punchBox) {
 			g.setStrokeStyle(1);
 			g.beginStroke(createjs.Graphics.getRGB(255,0,0));
 			g.drawRect(
-				wresler.punchbox.x,
-				wresler.punchbox.y,
-				wresler.punchbox.width,
-				wresler.punchbox.height
+				wresler.punchBox.x,
+				wresler.punchBox.y,
+				wresler.punchBox.width,
+				wresler.punchBox.height
 				);
 			var s = new createjs.Shape(g);
 			stage.addChild(s);

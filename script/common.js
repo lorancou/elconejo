@@ -23,8 +23,7 @@ function getDirSuffix(dir) {
 }
 
 // http://stackoverflow.com/a/901144/1005455
-function getParameterByName(name)
-{
+function getParameterByName(name) {
 	name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
 	var regexS = "[\\?&]" + name + "=([^&#]*)";
 	var regex = new RegExp(regexS);
@@ -33,4 +32,20 @@ function getParameterByName(name)
 		return "";
 	else
 		return decodeURIComponent(results[1].replace(/\+/g, " "));
+}
+
+// http://stackoverflow.com/a/306332/1005455
+function rectIntersect(rectA, rectB) {
+	var ax1 = rectA.x;
+	var ax2 = rectA.x + rectA.width;
+	var ay1 = rectA.y;
+	var ay2 = rectA.y + rectA.height;
+	var bx1 = rectB.x;
+	var bx2 = rectB.x + rectB.width;
+	var by1 = rectB.y;
+	var by2 = rectB.y + rectB.height;
+	return 	ax1 < bx2 &&
+			ax2 > bx1 &&
+	    	ay1 < ay2 &&
+	    	ay2 > by1; 
 }

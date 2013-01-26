@@ -39,3 +39,5 @@ var SKULL_ANIMS = {
 	run_up: [ 0,  1, "run_up", 5],
 
 };
+
+var SKULL_HITBOX = { x: 0, y: 0, width: 32, height: 32 };
