@@ -1,5 +1,8 @@
 "use strict";
 
+var imagePool = new Array();
+var jsonPool = new Array();
+
 var ROOM_WIDTH = 640;
 var ROOM_HEIGHT = 480;
 
@@ -48,4 +51,14 @@ function rectIntersect(rectA, rectB) {
 			ax2 > bx1 &&
 	    	ay1 < ay2 &&
 	    	ay2 > by1; 
+}
+
+// http://stackoverflow.com/a/1267338/1005455
+function zeroFill(number, width) {
+	width -= number.toString().length;
+	if ( width > 0 )
+	{
+		return new Array( width + (/\./.test( number ) ? 2 : 1) ).join( '0' ) + number;
+	}
+	return number + ""; // always return a string
 }
