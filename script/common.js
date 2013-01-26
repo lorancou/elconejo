@@ -7,9 +7,6 @@ var ROOM_WIDTH = 640;
 var ROOM_HEIGHT = 480;
 var ROOM_TILE_SIZE = 32;
 
-var GUI_WIDTH = 640;
-var GUI_HEIGHT = 64;
-
 var DIR_DW = 0;
 var DIR_LF = 1;
 var DIR_RT = 2;

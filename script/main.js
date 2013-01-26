@@ -11,12 +11,9 @@ var loadingInterval = 0;
 var stage;
 
 // Gameplay
-var score;
+var hud;
 var room;
 var wrestler;
-
-// TEMP
-var scoreDiv;
 
 function init() {
 
@@ -27,6 +24,7 @@ function init() {
 	stage = new createjs.Stage(canvas);
 
 	var manifest = [
+		{src:"./assets/bg/hud.png", id:"hud"},
 		{src:"./assets/sprites/skull.png", id:"skull"},
 		{src:"./assets/sprites/wrestler.png", id:"wrestler"},
 	];
@@ -81,9 +79,7 @@ function doneLoading() {
 	
 	clearInterval(loadingInterval);
 
-	scoreDiv = document.getElementById("score");
-
-	score = 0;
+	hud = new HUD();
 
 	// create a room
 	room = new Room(0);
@@ -133,13 +129,14 @@ function draw() {
 
 	room.draw(stage);
 	wrestler.draw(stage);
+	hud.draw(stage);
 
 	if (debug) {
 		var g = new createjs.Graphics();
 		room.debugDraw(g, stage);
 		wrestler.debugDraw(g, stage);
 	}
-
+	
 	// call update on the stage to make it render the current display list to the canvas:
 	stage.clear();
 	stage.update();
