@@ -6,6 +6,10 @@ var Wall = function(x, y) {
 
     this.x = x;
     this.y = y;
+    this.width = ROOM_TILE_SIZE;
+    this.height = ROOM_TILE_SIZE;
+
+    this.touched = false;
 
     return this;
 };
@@ -13,7 +17,7 @@ var Wall = function(x, y) {
 Wall.prototype.debugDraw = function(g, stage) {
 
     g.setStrokeStyle(1);
-    g.beginStroke(createjs.Graphics.getRGB(255,0,255));
+    g.beginStroke(createjs.Graphics.getRGB(255,0,this.touched?0:255));
     g.drawRect(
         this.x,
         this.y,

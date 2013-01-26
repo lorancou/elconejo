@@ -22,6 +22,8 @@ var WRESLER_ANIMS = {
 	punch_up: [28, 31, false, 5],
 };
 
+var WRESLER_HITBOX = { x: 32, y: 64, width: 32, height: 32 };
+
 var WRESLER_PUNCHBOX = [
 	// x, y, width, height
 

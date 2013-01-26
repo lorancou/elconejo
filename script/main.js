@@ -105,7 +105,7 @@ function doneLoading() {
 function update(dt) {
 
 	// game objects updates
-	wresler.update(dt);
+	wresler.update(dt, room);
 
 	room.update(dt, wresler);
 

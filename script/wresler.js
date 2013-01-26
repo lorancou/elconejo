@@ -11,9 +11,6 @@ var WRESLER_SIZE = 96; // 48*2
 
 var Wresler = function() {
 
-    this.x = 320;
-    this.y = 240;
-
     this.dwHeld = false;
     this.lfHeld = false;
     this.rtHeld = false;
@@ -33,16 +30,21 @@ var Wresler = function() {
         "images": ["./assets/sprites/wresler.png"]
     });
 
-    this.anim = new createjs.BitmapAnimation(ss);
-    this.anim.scaleY = this.anim.scaleX = 1;
-    this.anim.x = this.x - WRESLER_SIZE / 2;
-    this.anim.y = this.y - WRESLER_SIZE / 2;
-    this.anim.gotoAndPlay("run_dw");
-                            
+    this.sprite = new createjs.BitmapAnimation(ss);
+    this.sprite.scaleY = this.sprite.scaleX = 1;
+    this.sprite.x = 320;
+    this.sprite.y = 240;
+    this.sprite.width = WRESLER_SIZE;
+    this.sprite.height = WRESLER_SIZE;
+    this.sprite.gotoAndPlay("run_dw");
+
     return this;
 };
 
-Wresler.prototype.update = function(dt) {
+Wresler.prototype.update = function(dt, room) {
+
+    var newX = this.sprite.x;
+    var newY = this.sprite.y;
 
     switch (this.state) {
 
@@ -53,28 +55,28 @@ Wresler.prototype.update = function(dt) {
     case STATE_RUN: {
         // move
         if (this.dwHeld) {
-            this.y += WRESLER_MOVE_SPEED * dt / 1000;
+            newY = Math.round(this.sprite.y + WRESLER_MOVE_SPEED * dt / 1000);
         }
         if (this.lfHeld) {
-            this.x -= WRESLER_MOVE_SPEED * dt / 1000;
+            newX = Math.round(this.sprite.x - WRESLER_MOVE_SPEED * dt / 1000);
         }
         if (this.rtHeld) {
-            this.x += WRESLER_MOVE_SPEED * dt / 1000;
+            newX = Math.round(this.sprite.x + WRESLER_MOVE_SPEED * dt / 1000);
         }
         if (this.upHeld) {
-            this.y -= WRESLER_MOVE_SPEED * dt / 1000;
+            newY = Math.round(this.sprite.y - WRESLER_MOVE_SPEED * dt / 1000);
         }
 
     } break;
 
     case STATE_PUNCH: {
 
-        if (this.anim.currentAnimationFrame < 3) {
+        if (this.sprite.currentAnimationFrame < 3) {
 
             // detect hits
             this.punchBox = new createjs.Rectangle(
-                this.anim.x + WRESLER_PUNCHBOX[this.dir].x,
-                this.anim.y + WRESLER_PUNCHBOX[this.dir].y,
+                this.sprite.x + WRESLER_PUNCHBOX[this.dir].x,
+                this.sprite.y + WRESLER_PUNCHBOX[this.dir].y,
                 WRESLER_PUNCHBOX[this.dir].width,
                 WRESLER_PUNCHBOX[this.dir].height
                 );
@@ -91,19 +93,77 @@ Wresler.prototype.update = function(dt) {
 
     }
 
-    this.anim.x = this.x - WRESLER_SIZE / 2;
-    this.anim.y = this.y - WRESLER_SIZE / 2;
+function createBox(x, y, box) {
+    return 
+}
+
+    this.hitBox = new createjs.Rectangle(
+        newX + WRESLER_HITBOX.x,
+        newY + WRESLER_HITBOX.y,
+        WRESLER_HITBOX.width,
+        WRESLER_HITBOX.height
+        );
+
+    var topLeft = getTopLeft(this.hitBox);
+    var botLeft = getBotLeft(this.hitBox);
+    var topRight = getTopRight(this.hitBox);
+    var botRight = getBotRight(this.hitBox);
+
+    var wallTopLeft = room.getWallAt(topLeft);
+    var wallBotLeft = room.getWallAt(botLeft);
+    var wallTopRight = room.getWallAt(topRight);
+    var wallBotRight = room.getWallAt(botRight);
+
+    if (newX < this.sprite.x) {
+        if (wallTopLeft) {
+            wallTopLeft.touched = true;
+            this.hitBox.x = getRight(wallTopLeft);
+        } else if (wallBotLeft) {
+            wallBotLeft.touched = true;
+            this.hitBox.x = getRight(wallBotLeft);
+        }
+    } else if (newX > this.sprite.x) {
+        if (wallTopRight) {
+            wallTopRight.touched = true;
+            this.hitBox.x = getLeft(wallTopRight) - ROOM_TILE_SIZE - 1; // hack
+        } else if (wallBotRight) {
+            wallBotRight.touched = true;
+            this.hitBox.x = getLeft(wallBotRight) - ROOM_TILE_SIZE - 1; // hack
+        }
+    }
+
+    if (newY < this.sprite.y) {
+        if (wallTopLeft) {
+            wallTopLeft.touched = true;
+            this.hitBox.y = getBottom(wallTopLeft);
+        } else if (wallTopRight) {
+            wallTopRight.touched = true;
+            this.hitBox.y = getBottom(wallTopRight);
+        }
+    } else if (newY > this.sprite.y) {
+        if (wallBotLeft) {
+            wallBotLeft.touched = true;
+            this.hitBox.y = getTop(wallBotLeft) - ROOM_TILE_SIZE - 1; // hack
+        } else if (wallBotRight) {
+            wallBotRight.touched = true;
+            this.hitBox.y = getTop(wallBotRight) - ROOM_TILE_SIZE - 1; // hack
+        }
+    }
+
+    this.sprite.x = this.hitBox.x - WRESLER_HITBOX.x;
+    this.sprite.y = this.hitBox.y - WRESLER_HITBOX.y;
 }
 
 Wresler.prototype.draw = function(stage) {
 
-    stage.addChild(this.anim);
+    stage.addChild(this.sprite);
 }
 
 Wresler.prototype.debugDraw = function(g, stage) {
 
+    g.setStrokeStyle(1);
+
     if (this.punchBox) {
-        g.setStrokeStyle(1);
         g.beginStroke(createjs.Graphics.getRGB(255,0,0));
         g.drawRect(
             this.punchBox.x,
@@ -111,9 +171,18 @@ Wresler.prototype.debugDraw = function(g, stage) {
             this.punchBox.width,
             this.punchBox.height
             );
-        var s = new createjs.Shape(g);
-        stage.addChild(s);
-    }    
+    }
+
+    g.beginStroke(createjs.Graphics.getRGB(0,255,0));
+    g.drawRect(
+        this.hitBox.x,
+        this.hitBox.y,
+        this.hitBox.width,
+        this.hitBox.height
+        );
+
+    var s = new createjs.Shape(g);
+    stage.addChild(s);        
 }
 
 Wresler.prototype.handleKeyDown = function(e) {
@@ -161,12 +230,12 @@ Wresler.prototype.setState = function(state) {
 
     case STATE_RUN: {
         var newAnim = "run" + getDirSuffix(this.dir);
-        this.anim.gotoAndPlay(newAnim);
+        this.sprite.gotoAndPlay(newAnim);
     } break;
 
     case STATE_PUNCH: {
         var newAnim = "punch" + getDirSuffix(this.dir);
-        this.anim.gotoAndPlay(newAnim);
+        this.sprite.gotoAndPlay(newAnim);
     } break;
 
     }

@@ -5,6 +5,7 @@ var jsonPool = new Array();
 
 var ROOM_WIDTH = 640;
 var ROOM_HEIGHT = 480;
+var ROOM_TILE_SIZE = 32;
 
 var DIR_DW = 0;
 var DIR_LF = 1;
@@ -61,4 +62,52 @@ function zeroFill(number, width) {
 		return new Array( width + (/\./.test( number ) ? 2 : 1) ).join( '0' ) + number;
 	}
 	return number + ""; // always return a string
+}
+
+function getTileIndex(pos) {
+	var col = Math.round(pos.x / ROOM_TILE_SIZE);
+	var row = Math.round(pos.y / ROOM_TILE_SIZE);
+	return row * (ROOM_WIDTH / ROOM_TILE_SIZE) + col;
+}
+
+function getTopLeft(entity) {
+    return new Vector2(
+    	entity.x,
+    	entity.y
+    	);
+}
+function getTopRight(entity) {
+    return new Vector2(
+    	entity.x + entity.width,
+    	entity.y
+    	);
+}
+function getBotLeft(entity) {
+    return new Vector2(
+    	entity.x,
+    	entity.y + entity.height
+    	);
+}
+function getBotRight(entity) {
+    return new Vector2(
+    	entity.x + entity.width,
+    	entity.y + entity.height
+    	);
+}
+function getLeft(entity) {
+    return entity.x;
+}
+function getRight(entity) {
+    return entity.x + entity.width;
+}
+function getTop(entity) {
+    return entity.y;
+}
+function getBottom(entity) {
+    return entity.y + entity.height;
+}
+
+var Vector2 = function(x, y) {
+	this.x = x;
+	this.y = y;
 }
