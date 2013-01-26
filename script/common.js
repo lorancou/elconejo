@@ -1,5 +1,8 @@
 "use strict";
 
+var ROOM_WIDTH = 640;
+var ROOM_HEIGHT = 480;
+
 var DIR_DW = 0;
 var DIR_LF = 1;
 var DIR_RT = 2;

@@ -4,6 +4,7 @@ var debug = getParameterByName("debug") == "true" ? true : false;
 var stage;
 var room;
 var wresler;
+var skulls;
 
 function init() {
 	
@@ -14,10 +15,16 @@ function init() {
 	stage = new createjs.Stage(canvas);
 
 	// create a room
-	room = new Room(stage);
+	room = new Room();
 
 	// create our wresler
-	wresler = new Wresler(stage);
+	wresler = new Wresler();
+
+	// create a bunch of skulls
+	skulls = new Array();
+	for (var i = 0; i<10; ++i) {
+		skulls.push(new Skull());
+	}
 
 	//register key functions
 	document.onkeydown = handleKeyDown;
@@ -38,7 +45,7 @@ function update(dt) {
 		room.change((room.index + 4 - 1)%4);
 		wresler.x = 320;
 		wresler.y = 240;
-	} else if (wresler.x > 640) {
+	} else if (wresler.x > ROOM_WIDTH) {
 		room.change((room.index + 1)%4);
 		wresler.x = 320;
 		wresler.y = 240;
@@ -46,7 +53,7 @@ function update(dt) {
 		room.change((room.index + 4 - 1)%4);
 		wresler.x = 320;
 		wresler.y = 240;
-	} else if (wresler.y > 640) {
+	} else if (wresler.y > ROOM_HEIGHT) {
 		room.change((room.index + 1)%4);
 		wresler.x = 320;
 		wresler.y = 240;
@@ -55,16 +62,22 @@ function update(dt) {
 	// game objects updates
 	wresler.update(dt);
 
+	for (var i = 0; i<10; ++i) {
+		skulls[i].update(dt);
+	}
+
 	draw();
 }
 
 function draw() {
 
 	stage.addChild(room.bitmap);
-	stage.addChild(wresler.anim);
 
-	var g = new createjs.Graphics();
-	g.setStrokeStyle(1);
+	for (var i = 0; i<10; ++i) {
+		stage.addChild(skulls[i].anim);
+	}
+
+	stage.addChild(wresler.anim);
 
 	if (debug) {
 		var g = new createjs.Graphics();

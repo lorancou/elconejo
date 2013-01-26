@@ -30,7 +30,7 @@ var Wresler = function() {
             "height": WRESLER_SIZE
         },
         "animations": WRESLER_ANIMS,
-        "images": ["./assets/wresler.png"]
+        "images": ["./assets/sprites/wresler.png"]
     });
 
     this.anim = new createjs.BitmapAnimation(ss);
@@ -64,8 +64,6 @@ Wresler.prototype.update = function(dt) {
         if (this.upHeld) {
             this.y -= WRESLER_MOVE_SPEED * dt / 1000;
         }
-        this.anim.x = this.x - WRESLER_SIZE / 2;
-        this.anim.y = this.y - WRESLER_SIZE / 2;
 
     } break;
 
@@ -93,6 +91,8 @@ Wresler.prototype.update = function(dt) {
 
     }
 
+    this.anim.x = this.x - WRESLER_SIZE / 2;
+    this.anim.y = this.y - WRESLER_SIZE / 2;
 }
 
 Wresler.prototype.handleKeyDown = function(e) {

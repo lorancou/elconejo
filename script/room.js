@@ -10,7 +10,7 @@ var Room = function() {
         new createjs.Bitmap("./assets/room03.png"),
         new createjs.Bitmap("./assets/room04.png"),
     ];*/
-    this.bitmap = new createjs.Bitmap("./assets/room0" + (this.index+1) + ".png");
+    this.bitmap = new createjs.Bitmap("./assets/bg/room0" + (this.index+1) + ".png");
                             
     return this;
 };
@@ -24,6 +24,6 @@ Room.prototype.change = function(newIndex) {
     stage.removeChildAt(0);
     this.index = newIndex;
     var number = this.index + 1;
-    this.bitmap = new createjs.Bitmap("./assets/room0" + number + ".png");
+    this.bitmap = new createjs.Bitmap("./assets/bg/room0" + number + ".png");
     stage.addChildAt(this.bitmap, 0);
 }

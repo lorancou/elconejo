@@ -1,6 +1,6 @@
 "use strict";
 
-//**** El Conejo the Wresler *****************************************
+//**** El Conejo the Wresler *************************************************
 
 var WRESLER_MOVE_SPEED = 256; //Vitesse en pixels par seconde.
 
@@ -27,3 +27,15 @@ var WRESLER_PUNCHBOX = [
 	{ x: 24, y: 24, width: 48, height: 48 }, // up
 
 ];
+
+//**** Los Skullos con un Sombrero *******************************************
+
+var SKULL_ANIMS = {
+	// start, end, next, frequency
+
+	run_dw: [ 0,  1, "run_dw", 5],
+	run_lf: [ 0,  1, "run_lf", 5],
+	run_rt: [ 0,  1, "run_rt", 5],
+	run_up: [ 0,  1, "run_up", 5],
+
+};
