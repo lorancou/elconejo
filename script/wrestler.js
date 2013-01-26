@@ -7,9 +7,9 @@ var KEYCODE_DW = 40;
 var KEYCODE_PUNCH_1 = 87;
 var KEYCODE_PUNCH_2 = 90;
 
-var WRESLER_SIZE = 96; // 48*2
+var WRESTLER_SIZE = 96; // 48*2
 
-var Wresler = function() {
+var Wrestler = function() {
 
     this.dwHeld = false;
     this.lfHeld = false;
@@ -23,25 +23,25 @@ var Wresler = function() {
 
     var ss = new createjs.SpriteSheet({
         "frames": {
-            "width": WRESLER_SIZE,
-            "height": WRESLER_SIZE
+            "width": WRESTLER_SIZE,
+            "height": WRESTLER_SIZE
         },
-        "animations": WRESLER_ANIMS,
-        "images": ["./assets/sprites/wresler.png"]
+        "animations": WRESTLER_ANIMS,
+        "images": ["./assets/sprites/wrestler.png"]
     });
 
     this.sprite = new createjs.BitmapAnimation(ss);
     this.sprite.scaleY = this.sprite.scaleX = 1;
     this.sprite.x = 320;
     this.sprite.y = 240;
-    this.sprite.width = WRESLER_SIZE;
-    this.sprite.height = WRESLER_SIZE;
+    this.sprite.width = WRESTLER_SIZE;
+    this.sprite.height = WRESTLER_SIZE;
     this.sprite.gotoAndPlay("run_dw");
 
     return this;
 };
 
-Wresler.prototype.update = function(dt, room) {
+Wrestler.prototype.update = function(dt, room) {
 
     var newX = this.sprite.x;
     var newY = this.sprite.y;
@@ -55,16 +55,16 @@ Wresler.prototype.update = function(dt, room) {
     case STATE_RUN: {
         // move
         if (this.dwHeld) {
-            newY = Math.round(this.sprite.y + WRESLER_MOVE_SPEED * dt / 1000);
+            newY = Math.round(this.sprite.y + WRESTLER_MOVE_SPEED * dt / 1000);
         }
         if (this.lfHeld) {
-            newX = Math.round(this.sprite.x - WRESLER_MOVE_SPEED * dt / 1000);
+            newX = Math.round(this.sprite.x - WRESTLER_MOVE_SPEED * dt / 1000);
         }
         if (this.rtHeld) {
-            newX = Math.round(this.sprite.x + WRESLER_MOVE_SPEED * dt / 1000);
+            newX = Math.round(this.sprite.x + WRESTLER_MOVE_SPEED * dt / 1000);
         }
         if (this.upHeld) {
-            newY = Math.round(this.sprite.y - WRESLER_MOVE_SPEED * dt / 1000);
+            newY = Math.round(this.sprite.y - WRESTLER_MOVE_SPEED * dt / 1000);
         }
 
     } break;
@@ -75,10 +75,10 @@ Wresler.prototype.update = function(dt, room) {
 
             // detect hits
             this.punchBox = new createjs.Rectangle(
-                this.sprite.x + WRESLER_PUNCHBOX[this.dir].x,
-                this.sprite.y + WRESLER_PUNCHBOX[this.dir].y,
-                WRESLER_PUNCHBOX[this.dir].width,
-                WRESLER_PUNCHBOX[this.dir].height
+                this.sprite.x + WRESTLER_PUNCHBOX[this.dir].x,
+                this.sprite.y + WRESTLER_PUNCHBOX[this.dir].y,
+                WRESTLER_PUNCHBOX[this.dir].width,
+                WRESTLER_PUNCHBOX[this.dir].height
                 );
 
         } else {
@@ -93,15 +93,11 @@ Wresler.prototype.update = function(dt, room) {
 
     }
 
-function createBox(x, y, box) {
-    return 
-}
-
     this.hitBox = new createjs.Rectangle(
-        newX + WRESLER_HITBOX.x,
-        newY + WRESLER_HITBOX.y,
-        WRESLER_HITBOX.width,
-        WRESLER_HITBOX.height
+        newX + WRESTLER_HITBOX.x,
+        newY + WRESTLER_HITBOX.y,
+        WRESTLER_HITBOX.width,
+        WRESTLER_HITBOX.height
         );
 
     var topLeft = getTopLeft(this.hitBox);
@@ -150,16 +146,16 @@ function createBox(x, y, box) {
         }
     }
 
-    this.sprite.x = this.hitBox.x - WRESLER_HITBOX.x;
-    this.sprite.y = this.hitBox.y - WRESLER_HITBOX.y;
+    this.sprite.x = this.hitBox.x - WRESTLER_HITBOX.x;
+    this.sprite.y = this.hitBox.y - WRESTLER_HITBOX.y;
 }
 
-Wresler.prototype.draw = function(stage) {
+Wrestler.prototype.draw = function(stage) {
 
     stage.addChild(this.sprite);
 }
 
-Wresler.prototype.debugDraw = function(g, stage) {
+Wrestler.prototype.debugDraw = function(g, stage) {
 
     g.setStrokeStyle(1);
 
@@ -185,7 +181,7 @@ Wresler.prototype.debugDraw = function(g, stage) {
     stage.addChild(s);        
 }
 
-Wresler.prototype.handleKeyDown = function(e) {
+Wrestler.prototype.handleKeyDown = function(e) {
 
     var newDir = null;
 
@@ -207,7 +203,7 @@ Wresler.prototype.handleKeyDown = function(e) {
     return true;
 }
 
-Wresler.prototype.handleKeyUp = function(e) {
+Wrestler.prototype.handleKeyUp = function(e) {
 
     switch(e.keyCode) {
         case KEYCODE_LF: this.lfHeld = false; return false;
@@ -223,7 +219,7 @@ Wresler.prototype.handleKeyUp = function(e) {
     return true;
 }
 
-Wresler.prototype.setState = function(state) {
+Wrestler.prototype.setState = function(state) {
 
     this.state = state;
     switch (state) {
@@ -240,4 +236,31 @@ Wresler.prototype.setState = function(state) {
 
     }
 
+}
+
+Wrestler.prototype.changeRoom = function(dir) {
+
+    switch (dir) {
+
+    case DIR_DW: {
+        this.sprite.x = (ROOM_WIDTH - WRESTLER_SIZE) * 0.5;
+        this.sprite.y = 0;
+    } break;
+
+    case DIR_LF: {
+        this.sprite.x = ROOM_WIDTH - WRESTLER_SIZE;
+        this.sprite.y = (ROOM_HEIGHT - WRESTLER_SIZE) * 0.5;
+    } break;
+
+    case DIR_RT: {
+        this.sprite.x = 0;
+        this.sprite.y = (ROOM_HEIGHT - WRESTLER_SIZE) * 0.5;
+    } break;
+
+    case DIR_UP: {
+        this.sprite.x = (ROOM_WIDTH - WRESTLER_SIZE) * 0.5;
+        this.sprite.y = ROOM_HEIGHT - WRESTLER_SIZE;
+    } break;
+
+    }
 }

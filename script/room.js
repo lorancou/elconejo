@@ -4,6 +4,9 @@ var ROOM_TILE_EMPTY = 0;
 var ROOM_TILE_WALL = 1;
 var ROOM_TILE_SKULL = 2;
 
+var ROOM_COL_COUNT = ROOM_WIDTH / ROOM_TILE_SIZE;
+var ROOM_ROW_COUNT = ROOM_HEIGHT / ROOM_TILE_SIZE;
+
 var Room = function(index) {
 
     this.index = index;
@@ -17,10 +20,16 @@ var Room = function(index) {
     this.bitmap = new createjs.Bitmap(imagePool["bg" + zeroedId]);
     this.json = jsonPool["room" + zeroedId];
 
-    this.wallsInAGrid = new Array(this.json.data.length);
-    for (var col=0; col<this.json.data.length; ++col) {    
-        this.wallsInAGrid[col] = new Array(this.json.data[col].length);
+    assert(this.json.data.length == ROOM_COL_COUNT);
+    this.wallsInAGrid = new Array(ROOM_COL_COUNT);
+
+    for (var col=0; col<ROOM_COL_COUNT; ++col) {
+
+        assert(this.json.data[col].length == ROOM_ROW_COUNT);
+        this.wallsInAGrid[col] = new Array(ROOM_ROW_COUNT);
+
         for (var row=0; row<this.json.data[col].length; ++row) {
+
             var x = col * ROOM_TILE_SIZE;
             var y = row * ROOM_TILE_SIZE;
             switch (this.json.data[col][row][0]) {
@@ -38,7 +47,7 @@ var Room = function(index) {
     return this;
 };
 
-Room.prototype.update = function(dt, wresler) {
+Room.prototype.update = function(dt, wrestler) {
 
     for (var i = 0; i<this.skulls.length; ++i) {
         if (!this.skulls[i]) {
@@ -48,14 +57,14 @@ Room.prototype.update = function(dt, wresler) {
         this.skulls[i].update(dt);
 
         // hits
-        if (wresler.punchBox) {
+        if (wrestler.punchBox) {
             var hitBox = new createjs.Rectangle(
                 this.skulls[i].anim.x + SKULL_HITBOX.x,
                 this.skulls[i].anim.y + SKULL_HITBOX.y,
                 SKULL_HITBOX.width,
                 SKULL_HITBOX.height
                 );
-            if (rectIntersect(hitBox, wresler.punchBox)) {
+            if (rectIntersect(hitBox, wrestler.punchBox)) {
                 this.skulls[i] = null;
                 //score += 1;
                 //scoreDiv.innerHTML = score;
@@ -85,6 +94,15 @@ Room.prototype.debugDraw = function(g, stage) {
 
 Room.prototype.getWallAt = function(pos) {
     var col = Math.floor(pos.x / ROOM_TILE_SIZE);
-    var row = Math.floor(pos.y / ROOM_TILE_SIZE); 
+    var row = Math.floor(pos.y / ROOM_TILE_SIZE);
+    if (col < 0 ||
+        col >= ROOM_COL_COUNT ||
+        row < 0 ||
+        row >= ROOM_ROW_COUNT
+        )
+    {
+        return null;
+    }
+    assert(this.wallsInAGrid[col] !== undefined);
     return this.wallsInAGrid[col][row];
 }

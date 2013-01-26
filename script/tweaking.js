@@ -4,11 +4,11 @@
 
 var ROOM_COUNT = 5;
 
-//**** El Conejo the Wresler *************************************************
+//**** El Conejo the Wrestler *************************************************
 
-var WRESLER_MOVE_SPEED = 256; //Vitesse en pixels par seconde.
+var WRESTLER_MOVE_SPEED = 128; //Vitesse en pixels par seconde.
 
-var WRESLER_ANIMS = {
+var WRESTLER_ANIMS = {
 	// start, end, next, frequency
 
 	run_dw: [ 0,  3, "run_dw", 5],
@@ -16,15 +16,15 @@ var WRESLER_ANIMS = {
 	run_rt: [ 8, 11, "run_rt", 5],
 	run_up: [12, 15, "run_up", 5],
 
-	punch_dw: [16, 19, false, 5],
-	punch_lf: [20, 23, false, 5],
-	punch_rt: [24, 27, false, 5],
-	punch_up: [28, 31, false, 5],
+	punch_dw: [20, 24, false, 5],
+	punch_lf: [25, 29, false, 5],
+	punch_rt: [30, 34, false, 5],
+	punch_up: [35, 39, false, 5],
 };
 
-var WRESLER_HITBOX = { x: 32, y: 64, width: 32, height: 32 };
+var WRESTLER_HITBOX = { x: 32, y: 64, width: 32, height: 32 };
 
-var WRESLER_PUNCHBOX = [
+var WRESTLER_PUNCHBOX = [
 	// x, y, width, height
 
 	{ x: 24, y: 48, width: 48, height: 48 }, // down

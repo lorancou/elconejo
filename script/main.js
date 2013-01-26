@@ -13,7 +13,7 @@ var stage;
 // Gameplay
 var score;
 var room;
-var wresler;
+var wrestler;
 
 // TEMP
 var scoreDiv;
@@ -28,7 +28,7 @@ function init() {
 
 	var manifest = [
 		{src:"./assets/sprites/skull.png", id:"skull"},
-		{src:"./assets/sprites/wresler.png", id:"wresler"},
+		{src:"./assets/sprites/wrestler.png", id:"wrestler"},
 	];
 	for (var i=0; i<ROOM_COUNT; ++i) {
 	    var zeroedId = zeroFill(i, 2);
@@ -88,8 +88,8 @@ function doneLoading() {
 	// create a room
 	room = new Room(0);
 
-	// create our wresler
-	wresler = new Wresler();
+	// create our wrestler
+	wrestler = new Wrestler();
 
 	//register key functions
 	document.onkeydown = handleKeyDown;
@@ -105,41 +105,39 @@ function doneLoading() {
 function update(dt) {
 
 	// game objects updates
-	wresler.update(dt, room);
+	wrestler.update(dt, room);
 
-	room.update(dt, wresler);
+	room.update(dt, wrestler);
 
 	draw();
 
 	// room change
-	if (wresler.x < 0) {
+	var topLeft = getTopLeft(wrestler.hitBox);
+	var bottomRight = getBotRight(wrestler.hitBox);
+	if (topLeft.x < 0) {
 		room = new Room((room.index + 5)%4);
-		wresler.x = 320;
-		wresler.y = 240;
-	} else if (wresler.x > ROOM_WIDTH) {
+		wrestler.changeRoom(DIR_LF);
+	} else if (bottomRight.x > ROOM_WIDTH) {
 		room = new Room((room.index + 1)%4);
-		wresler.x = 320;
-		wresler.y = 240;
-	} else if (wresler.y < 0) {
+		wrestler.changeRoom(DIR_RT);
+	} else if (topLeft.y < 0) {
 		room = new Room((room.index + 5)%4);
-		wresler.x = 320;
-		wresler.y = 240;
-	} else if (wresler.y > ROOM_HEIGHT) {
+		wrestler.changeRoom(DIR_UP);
+	} else if (bottomRight.y > ROOM_HEIGHT) {
 		room = new Room((room.index + 1)%4);
-		wresler.x = 320;
-		wresler.y = 240;
+		wrestler.changeRoom(DIR_DW);
 	}	
 }
 
 function draw() {
 
 	room.draw(stage);
-	wresler.draw(stage);
+	wrestler.draw(stage);
 
 	if (debug) {
 		var g = new createjs.Graphics();
 		room.debugDraw(g, stage);
-		wresler.debugDraw(g, stage);
+		wrestler.debugDraw(g, stage);
 	}
 
 	// call update on the stage to make it render the current display list to the canvas:
@@ -152,12 +150,12 @@ function handleKeyDown(e) {
 
 	//cross browser issues exist
 	if(!e){ var e = window.event; }
-	wresler.handleKeyDown(e);
+	wrestler.handleKeyDown(e);
 }
 
 function handleKeyUp(e) {
 
 	//cross browser issues exist
 	if(!e){ var e = window.event; }
-	wresler.handleKeyUp(e);
+	wrestler.handleKeyUp(e);
 }
