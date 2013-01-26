@@ -243,22 +243,18 @@ Wrestler.prototype.changeRoom = function(dir) {
     switch (dir) {
 
     case DIR_DW: {
-        this.sprite.x = (ROOM_WIDTH - WRESTLER_SIZE) * 0.5;
         this.sprite.y = 0;
     } break;
 
     case DIR_LF: {
         this.sprite.x = ROOM_WIDTH - WRESTLER_SIZE;
-        this.sprite.y = (ROOM_HEIGHT - WRESTLER_SIZE) * 0.5;
     } break;
 
     case DIR_RT: {
         this.sprite.x = 0;
-        this.sprite.y = (ROOM_HEIGHT - WRESTLER_SIZE) * 0.5;
     } break;
 
     case DIR_UP: {
-        this.sprite.x = (ROOM_WIDTH - WRESTLER_SIZE) * 0.5;
         this.sprite.y = ROOM_HEIGHT - WRESTLER_SIZE;
     } break;
 
