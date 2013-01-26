@@ -9,7 +9,7 @@ var KEYCODE_PUNCH_2 = 90;
 
 var WRESLER_SIZE = 96; // 48*2
 
-var Wresler = function(stage) {
+var Wresler = function() {
 
     this.x = 320;
     this.y = 240;
@@ -36,8 +36,6 @@ var Wresler = function(stage) {
     this.anim.x = this.x - WRESLER_SIZE / 2;
     this.anim.y = this.y - WRESLER_SIZE / 2;
     this.anim.gotoAndPlay("run_dw");
-
-    stage.addChild(this.anim);
                             
     return this;
 };
@@ -77,6 +75,7 @@ Wresler.prototype.update = function(dt) {
     } break;
 
     }
+
 }
 
 Wresler.prototype.handleKeyDown = function(e) {
@@ -91,8 +90,8 @@ Wresler.prototype.handleKeyDown = function(e) {
     }
 
     if (newDir != null && newDir != this.dir) {
+        this.dir = newDir;
         if (this.state == STATE_RUN) {
-            this.dir = newDir;
             this.setState(STATE_RUN);
         }
         return false;

@@ -54,8 +54,18 @@ function update(dt) {
 	// game objects updates
 	wresler.update(dt);
 
+	draw();
+}
+
+function draw() {
+
+	stage.addChild(room.bitmap);
+	stage.addChild(wresler.anim);
+
 	// call update on the stage to make it render the current display list to the canvas:
+	stage.clear();
 	stage.update();
+	stage.removeAllChildren();
 }
 
 function handleKeyDown(e) {

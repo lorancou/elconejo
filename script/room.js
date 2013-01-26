@@ -1,6 +1,6 @@
 "use strict";
 
-var Room = function(stage) {
+var Room = function() {
 
     this.index = 0;
 
@@ -11,9 +11,6 @@ var Room = function(stage) {
         new createjs.Bitmap("./assets/room04.png"),
     ];*/
     this.bitmap = new createjs.Bitmap("./assets/room0" + (this.index+1) + ".png");
-
-    //stage.addChildAt(this.bitmaps[this.index],0);
-    stage.addChildAt(this.bitmap,0);
                             
     return this;
 };
