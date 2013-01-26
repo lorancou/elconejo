@@ -1,5 +1,9 @@
 "use strict";
 
+//**** Room control **********************************************************
+
+var ROOM_COUNT = 5;
+
 //**** El Conejo the Wresler *************************************************
 
 var WRESLER_MOVE_SPEED = 256; //Vitesse en pixels par seconde.

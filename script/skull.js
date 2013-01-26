@@ -2,10 +2,10 @@
 
 var SKULL_SIZE = 32; // 16*2
 
-var Skull = function() {
+var Skull = function(x, y) {
 
-    this.x = Math.round(Math.random() * ROOM_WIDTH);
-    this.y = Math.round(Math.random() * ROOM_HEIGHT);
+    this.x = x;
+    this.y = y;
 
     this.dir = DIR_DW;
     this.state = STATE_RUN;

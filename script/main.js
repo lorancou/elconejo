@@ -14,7 +14,6 @@ var stage;
 var score;
 var room;
 var wresler;
-var skulls;
 
 // TEMP
 var scoreDiv;
@@ -28,16 +27,14 @@ function init() {
 	stage = new createjs.Stage(canvas);
 
 	var manifest = [
-		{src:"./assets/bg/bg00.png", id:"bg00"},
-		{src:"./assets/bg/bg01.png", id:"bg01"},
-		{src:"./assets/bg/bg02.png", id:"bg02"},
-		{src:"./assets/bg/bg03.png", id:"bg03"},
-		{src:"./assets/bg/bg04.png", id:"bg04"},
-		{src:"./assets/rooms/room00.json", id:"room00"},
-		{src:"./assets/rooms/room01.json", id:"room01"},
 		{src:"./assets/sprites/skull.png", id:"skull"},
 		{src:"./assets/sprites/wresler.png", id:"wresler"},
 	];
+	for (var i=0; i<ROOM_COUNT; ++i) {
+	    var zeroedId = zeroFill(i, 2);
+		manifest.push({src:"./assets/bg/bg"+zeroedId+".png", id:"bg"+zeroedId});
+		manifest.push({src:"./assets/rooms/room"+zeroedId+".json", id:"room"+zeroedId});
+	}
 
 	preload = new createjs.PreloadJS();
     preload.onFileLoad = handleFileLoad;
@@ -94,12 +91,6 @@ function doneLoading() {
 	// create our wresler
 	wresler = new Wresler();
 
-	// create a bunch of skulls
-	skulls = new Array();
-	for (var i = 0; i<10; ++i) {
-		skulls.push(new Skull());
-	}
-
 	//register key functions
 	document.onkeydown = handleKeyDown;
 	document.onkeyup = handleKeyUp;
@@ -116,30 +107,7 @@ function update(dt) {
 	// game objects updates
 	wresler.update(dt);
 
-	room.update();
-
-	for (var i = 0; i<10; ++i) {
-		if (!skulls[i]) {
-			continue;
-		}
-
-		skulls[i].update(dt);
-
-		// hits
-		if (wresler.punchBox) {
-	        var hitBox = new createjs.Rectangle(
-	            skulls[i].anim.x + SKULL_HITBOX.x,
-	            skulls[i].anim.y + SKULL_HITBOX.y,
-	            SKULL_HITBOX.width,
-	            SKULL_HITBOX.height
-	            );
-	        if (rectIntersect(hitBox, wresler.punchBox)) {
-	        	skulls[i] = null;
-	        	score += 1;
-	        	scoreDiv.innerHTML = score;
-	        }
-	    }
-	}
+	room.update(dt, wresler);
 
 	draw();
 
@@ -165,31 +133,13 @@ function update(dt) {
 
 function draw() {
 
-	stage.addChild(room.bitmap);
-
-	for (var i = 0; i<10; ++i) {
-		if (!skulls[i]) {
-			continue;
-		}
-		stage.addChild(skulls[i].anim);
-	}
-
-	stage.addChild(wresler.anim);
+	room.draw(stage);
+	wresler.draw(stage);
 
 	if (debug) {
 		var g = new createjs.Graphics();
-		if (wresler.punchBox) {
-			g.setStrokeStyle(1);
-			g.beginStroke(createjs.Graphics.getRGB(255,0,0));
-			g.drawRect(
-				wresler.punchBox.x,
-				wresler.punchBox.y,
-				wresler.punchBox.width,
-				wresler.punchBox.height
-				);
-			var s = new createjs.Shape(g);
-			stage.addChild(s);
-		}
+		room.debugDraw(g, stage);
+		wresler.debugDraw(g, stage);
 	}
 
 	// call update on the stage to make it render the current display list to the canvas:

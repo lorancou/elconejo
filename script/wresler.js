@@ -95,6 +95,27 @@ Wresler.prototype.update = function(dt) {
     this.anim.y = this.y - WRESLER_SIZE / 2;
 }
 
+Wresler.prototype.draw = function(stage) {
+
+    stage.addChild(this.anim);
+}
+
+Wresler.prototype.debugDraw = function(g, stage) {
+
+    if (this.punchBox) {
+        g.setStrokeStyle(1);
+        g.beginStroke(createjs.Graphics.getRGB(255,0,0));
+        g.drawRect(
+            this.punchBox.x,
+            this.punchBox.y,
+            this.punchBox.width,
+            this.punchBox.height
+            );
+        var s = new createjs.Shape(g);
+        stage.addChild(s);
+    }    
+}
+
 Wresler.prototype.handleKeyDown = function(e) {
 
     var newDir = null;
