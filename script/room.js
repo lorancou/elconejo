@@ -1,3 +1,5 @@
+"use strict";
+
 var Room = function(stage) {
 
     this.index = 0;

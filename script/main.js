@@ -1,6 +1,8 @@
+"use strict";
+
 var stage;
 var room;
-var wresker;
+var wresler;
 
 function init() {
 	

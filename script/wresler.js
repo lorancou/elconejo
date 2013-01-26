@@ -1,77 +1,137 @@
-var KEYCODE_LEFT = 37;
+"use strict";
+
+var KEYCODE_LF = 37;
 var KEYCODE_UP = 38;
-var KEYCODE_RIGHT = 39;
-var KEYCODE_DOWN = 40;
-var MOVE_SPEED = 256;
+var KEYCODE_RT = 39;
+var KEYCODE_DW = 40;
+var KEYCODE_PUNCH_1 = 87;
+var KEYCODE_PUNCH_2 = 90;
+
+var WRESLER_SIZE = 96; // 48*2
 
 var Wresler = function(stage) {
 
     this.x = 320;
     this.y = 240;
 
+    this.dwHeld = false;
     this.lfHeld = false;
     this.rtHeld = false;
     this.upHeld = false;
-    this.dwHeld = false;
+
+    this.dir = DIR_DW;
+    this.state = STATE_RUN;
 
     var ss = new createjs.SpriteSheet({
         "frames": {
-            "width": 64,
-            "height": 64
+            "width": WRESLER_SIZE,
+            "height": WRESLER_SIZE
         },
         "animations": WRESLER_ANIMS,
-        "images": ["./assets/Wresler.png"]
+        "images": ["./assets/wresler.png"]
     });
 
-    this.bitmapAnimation = new createjs.BitmapAnimation(ss);
-    this.bitmapAnimation.scaleY = this.bitmapAnimation.scaleX = 1;
-    this.bitmapAnimation.x = this.x - 32;
-    this.bitmapAnimation.y = this.y - 32;
-    this.bitmapAnimation.gotoAndPlay("run");
+    this.anim = new createjs.BitmapAnimation(ss);
+    this.anim.scaleY = this.anim.scaleX = 1;
+    this.anim.x = this.x - WRESLER_SIZE / 2;
+    this.anim.y = this.y - WRESLER_SIZE / 2;
+    this.anim.gotoAndPlay("run_dw");
 
-    stage.addChild(this.bitmapAnimation);
+    stage.addChild(this.anim);
                             
     return this;
 };
 
 Wresler.prototype.update = function(dt) {
 
-    if (this.lfHeld) {
-        this.x -= MOVE_SPEED * dt / 1000;
+    switch (this.state) {
+
+    case STATE_IDLE: {
+        // don't move when idle
+    } break;
+
+    case STATE_RUN: {
+        // move
+        if (this.dwHeld) {
+            this.y += WRESLER_MOVE_SPEED * dt / 1000;
+        }
+        if (this.lfHeld) {
+            this.x -= WRESLER_MOVE_SPEED * dt / 1000;
+        }
+        if (this.rtHeld) {
+            this.x += WRESLER_MOVE_SPEED * dt / 1000;
+        }
+        if (this.upHeld) {
+            this.y -= WRESLER_MOVE_SPEED * dt / 1000;
+        }
+        this.anim.x = this.x - WRESLER_SIZE / 2;
+        this.anim.y = this.y - WRESLER_SIZE / 2;
+
+    } break;
+
+    case STATE_PUNCH: {
+        // back to run when done punching
+        if (this.anim.currentAnimationFrame == 3) { // 4-1
+            this.setState(STATE_RUN);
+        }
+    } break;
+
     }
-    if (this.rtHeld) {
-        this.x += MOVE_SPEED * dt / 1000;
-    }
-    if (this.upHeld) {
-        this.y -= MOVE_SPEED * dt / 1000;
-    }
-    if (this.dwHeld) {
-        this.y += MOVE_SPEED * dt / 1000;
-    }
-    this.bitmapAnimation.x = this.x - 32;
-    this.bitmapAnimation.y = this.y - 32;
 }
 
 Wresler.prototype.handleKeyDown = function(e) {
 
+    var newDir = null;
+
     switch(e.keyCode) {
-        case KEYCODE_LEFT:  this.lfHeld = true; return false;
-        case KEYCODE_RIGHT: this.rtHeld = true; return false;
-        case KEYCODE_UP:    this.upHeld = true; return false;
-        case KEYCODE_DOWN:  this.dwHeld = true; return false;
+        case KEYCODE_DW: this.dwHeld = true; newDir = DIR_DW; break;
+        case KEYCODE_LF: this.lfHeld = true; newDir = DIR_LF; break;
+        case KEYCODE_RT: this.rtHeld = true; newDir = DIR_RT; break;
+        case KEYCODE_UP: this.upHeld = true; newDir = DIR_UP; break;
     }
 
+    if (newDir != null && newDir != this.dir) {
+        if (this.state == STATE_RUN) {
+            this.dir = newDir;
+            this.setState(STATE_RUN);
+        }
+        return false;
+    }
+    //console.log("Unhandled key: " + e.keyCode);
     return true;
 }
 
 Wresler.prototype.handleKeyUp = function(e) {
 
     switch(e.keyCode) {
-        case KEYCODE_LEFT:  this.lfHeld = false; return false;
-        case KEYCODE_RIGHT: this.rtHeld = false; return false;
-        case KEYCODE_UP:    this.upHeld = false; return false;
-        case KEYCODE_DOWN:  this.dwHeld = false; return false;
+        case KEYCODE_LF: this.lfHeld = false; return false;
+        case KEYCODE_RT: this.rtHeld = false; return false;
+        case KEYCODE_UP: this.upHeld = false; return false;
+        case KEYCODE_DW: this.dwHeld = false; return false;
+
+        // punch
+        case KEYCODE_PUNCH_1:
+        case KEYCODE_PUNCH_2: this.setState(STATE_PUNCH); return false;
     }
 
     return true;
+}
+
+Wresler.prototype.setState = function(state) {
+
+    this.state = state;
+    switch (state) {
+
+    case STATE_RUN: {
+        var newAnim = "run" + getDirSuffix(this.dir);
+        this.anim.gotoAndPlay(newAnim);
+    } break;
+
+    case STATE_PUNCH: {
+        var newAnim = "punch" + getDirSuffix(this.dir);
+        this.anim.gotoAndPlay(newAnim);
+    } break;
+
+    }
+
 }
