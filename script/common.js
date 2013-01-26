@@ -53,7 +53,7 @@ function rectIntersect(rectA, rectB) {
 	var by2 = rectB.y + rectB.height;
 	return 	ax1 < bx2 &&
 			ax2 > bx1 &&
-	    	ay1 < ay2 &&
+	    	ay1 < by2 &&
 	    	ay2 > by1; 
 }
 
