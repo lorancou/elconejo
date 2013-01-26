@@ -1,3 +1,4 @@
+// El Conejo the Wresler
 var WRESLER_MOVE_SPEED = 256; //Vitesse en pixels par seconde.
 var WRESLER_ANIMS = {
 	// start, end, next, frequency

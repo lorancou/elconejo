@@ -4,7 +4,7 @@ var KEYCODE_RIGHT = 39;
 var KEYCODE_DOWN = 40;
 var MOVE_SPEED = 256;
 
-var wresler = function(stage) {
+var Wresler = function(stage) {
 
     this.x = 320;
     this.y = 240;
@@ -20,7 +20,7 @@ var wresler = function(stage) {
             "height": 64
         },
         "animations": WRESLER_ANIMS,
-        "images": ["./assets/wresler.png"]
+        "images": ["./assets/Wresler.png"]
     });
 
     this.bitmapAnimation = new createjs.BitmapAnimation(ss);
@@ -34,7 +34,7 @@ var wresler = function(stage) {
     return this;
 };
 
-wresler.prototype.update = function(dt) {
+Wresler.prototype.update = function(dt) {
 
     if (this.lfHeld) {
         this.x -= MOVE_SPEED * dt / 1000;
@@ -52,7 +52,7 @@ wresler.prototype.update = function(dt) {
     this.bitmapAnimation.y = this.y - 32;
 }
 
-wresler.prototype.handleKeyDown = function(e) {
+Wresler.prototype.handleKeyDown = function(e) {
 
     switch(e.keyCode) {
         case KEYCODE_LEFT:  this.lfHeld = true; return false;
@@ -64,7 +64,7 @@ wresler.prototype.handleKeyDown = function(e) {
     return true;
 }
 
-wresler.prototype.handleKeyUp = function(e) {
+Wresler.prototype.handleKeyUp = function(e) {
 
     switch(e.keyCode) {
         case KEYCODE_LEFT:  this.lfHeld = false; return false;

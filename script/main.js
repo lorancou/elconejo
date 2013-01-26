@@ -11,10 +11,10 @@ function init() {
 	stage = new createjs.Stage(canvas);
 
 	// create a room
-	room = new room(stage);
+	room = new Room(stage);
 
 	// create our wresler
-	wresler = new wresler(stage);
+	wresler = new Wresler(stage);
 
 	//register key functions
 	document.onkeydown = handleKeyDown;

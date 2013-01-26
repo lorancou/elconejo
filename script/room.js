@@ -1,4 +1,4 @@
-var room = function(stage) {
+var Room = function(stage) {
 
     this.index = 0;
 
@@ -16,11 +16,11 @@ var room = function(stage) {
     return this;
 };
 
-room.prototype.update = function(dt) {
+Room.prototype.update = function(dt) {
 
 }
 
-room.prototype.change = function(newIndex) {
+Room.prototype.change = function(newIndex) {
 
     stage.removeChildAt(0);
     this.index = newIndex;
