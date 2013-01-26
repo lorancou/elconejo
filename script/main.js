@@ -11,6 +11,7 @@ var loadingInterval = 0;
 var stage;
 
 // Gameplay
+var heart;
 var hud;
 var room;
 var wrestler;
@@ -79,6 +80,8 @@ function doneLoading() {
 	
 	clearInterval(loadingInterval);
 
+	heart = new Heart();
+
 	hud = new HUD();
 
 	// create a room
@@ -101,9 +104,10 @@ function doneLoading() {
 function update(dt) {
 
 	// game objects updates
+	heart.update(dt);
 	wrestler.update(dt, room);
-
 	room.update(dt, wrestler);
+	hud.update(dt, heart);
 
 	draw();
 
@@ -136,7 +140,7 @@ function draw() {
 		room.debugDraw(g, stage);
 		wrestler.debugDraw(g, stage);
 	}
-	
+
 	// call update on the stage to make it render the current display list to the canvas:
 	stage.clear();
 	stage.update();

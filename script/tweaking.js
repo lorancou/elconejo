@@ -1,5 +1,14 @@
 "use strict";
 
+//**** Heart beat control ****************************************************
+
+// ms
+var HEARTBEAT_LEVELS = [
+	{ delay: 1000, beat:  800 },
+	{ delay:  500, beat:  250 },
+	{ delay:  200, beat:  100 },
+];
+
 //**** Room control **********************************************************
 
 var ROOM_COUNT = 5;
