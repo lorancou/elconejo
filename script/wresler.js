@@ -2,6 +2,7 @@ var KEYCODE_LEFT = 37;
 var KEYCODE_UP = 38;
 var KEYCODE_RIGHT = 39;
 var KEYCODE_DOWN = 40;
+var MOVE_SPEED = 256;
 
 var wresler = function(stage) {
 
@@ -15,19 +16,17 @@ var wresler = function(stage) {
 
     var ss = new createjs.SpriteSheet({
         "frames": {
-            "width": 32,
-            "height": 32
+            "width": 64,
+            "height": 64
         },
-        "animations": {
-            "run": [0, 1]
-        },
+        "animations": WRESLER_ANIMS,
         "images": ["./assets/wresler.png"]
     });
 
     this.bitmapAnimation = new createjs.BitmapAnimation(ss);
     this.bitmapAnimation.scaleY = this.bitmapAnimation.scaleX = 1;
-    this.bitmapAnimation.x = 320;
-    this.bitmapAnimation.y = 240;
+    this.bitmapAnimation.x = this.x - 32;
+    this.bitmapAnimation.y = this.y - 32;
     this.bitmapAnimation.gotoAndPlay("run");
 
     stage.addChild(this.bitmapAnimation);
@@ -37,19 +36,20 @@ var wresler = function(stage) {
 
 wresler.prototype.update = function(dt) {
 
-    var move = WRESLER_MOVE_SPEED * dt / 1000;
     if (this.lfHeld) {
-        this.bitmapAnimation.x -= move;
+        this.x -= MOVE_SPEED * dt / 1000;
     }
     if (this.rtHeld) {
-        this.bitmapAnimation.x += move;
+        this.x += MOVE_SPEED * dt / 1000;
     }
     if (this.upHeld) {
-        this.bitmapAnimation.y -= move;
+        this.y -= MOVE_SPEED * dt / 1000;
     }
     if (this.dwHeld) {
-        this.bitmapAnimation.y += move;
+        this.y += MOVE_SPEED * dt / 1000;
     }
+    this.bitmapAnimation.x = this.x - 32;
+    this.bitmapAnimation.y = this.y - 32;
 }
 
 wresler.prototype.handleKeyDown = function(e) {
