@@ -25,6 +25,7 @@ var ROOM_COUNT = 17;
 //**** El Conejo the Wrestler *************************************************
 
 var WRESTLER_MOVE_SPEED = 176; //Vitesse en pixels par seconde.
+var WRESTLER_INVICIBILITY_DURATION = 1000; //s
 
 var WRESTLER_ANIMS = {
 	// start, end, next, frequency
@@ -44,7 +45,7 @@ var WRESTLER_ANIMS = {
 	idle_rt: [44, 45, "idle_rt", 10],
 	idle_up: [46, 47, "idle_up", 10],
 
-	take_damage: [60, 60, false, 1],
+	take_damage: [60, 61, "take_damage", 4],
 };
 
 var WRESTLER_HITBOX = { x: 32, y: 64, width: 32, height: 32 };

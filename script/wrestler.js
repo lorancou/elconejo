@@ -22,6 +22,8 @@ var Wrestler = function() {
     this.punchBox = null;
     this.punchHit = false;
 
+    this.invincibilityTimer = 0.0;
+
     this.sheet = new createjs.SpriteSheet({
         "frames": {
             "width": WRESTLER_SIZE,
@@ -52,7 +54,14 @@ Wrestler.prototype.update = function(dt, room) {
     switch (this.state) {
 
     case STATE_IDLE: {
+
         // don't move when idle
+
+        var anim = "idle" + getDirSuffix(this.dir);
+        if (this.sprite.currentAnimation != anim && this.invincibilityTimer == 0.0) {
+            this.sprite.gotoAndPlay(anim);
+        }
+
     } break;
 
     case STATE_RUN: {
@@ -91,13 +100,13 @@ Wrestler.prototype.update = function(dt, room) {
         //}
 
         var anim = "run" + getDirSuffix(this.dir);
-        if (this.sprite.currentAnimation != anim) {
+        if (this.sprite.currentAnimation != anim && this.invincibilityTimer == 0.0) {
             this.sprite.gotoAndPlay(anim);
         }
 
 
 
-        if (!somethingHeld) {
+        if (!somethingHeld && this.invincibilityTimer == 0.0) {
             this.setState(STATE_IDLE);
         }
 
@@ -138,13 +147,20 @@ Wrestler.prototype.update = function(dt, room) {
     }
 
 
-
     wrestlerResult = room.handleInteractions(this.punchBox, this.hitBox, this.punchCount);
     if (this.state == STATE_PUNCH && wrestlerResult.hit) {
         this.punchHit = true; // no miss
     }
 
-
+    // invincibility
+    if (wrestlerResult.hp < 0) {
+        if (this.invincibilityTimer == 0.0) {
+            this.sprite.gotoAndPlay("take_damage");
+        }
+        this.invincibilityTimer = WRESTLER_INVICIBILITY_DURATION;
+    } else {
+        this.invincibilityTimer = Math.max(0.0, this.invincibilityTimer - dt);
+    }
 
 
     this.hitBox = new createjs.Rectangle(
@@ -229,7 +245,8 @@ Wrestler.prototype.handleKeyUp = function(e) {
         // punch
         case KEYCODE_PUNCH_1:
         case KEYCODE_PUNCH_2: {
-            if (this.state == STATE_RUN || this.state == STATE_IDLE) {
+            if (this.invincibilityTimer == 0.0 &&
+                (this.state == STATE_RUN || this.state == STATE_IDLE)) {
                 this.setState(STATE_PUNCH);
             }
         }
