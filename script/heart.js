@@ -25,7 +25,7 @@ Heart.prototype.update = function(dt, interacResult) {
         }
     } else {
         if (this.timer > levelTimings.delay) {
-            this.timer -= levelTimings.beat;
+            this.timer -= levelTimings.delay;
             this.beat = true;
         }
     }
