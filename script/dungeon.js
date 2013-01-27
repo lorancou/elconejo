@@ -3,10 +3,11 @@
 var Dungeon = function() {
 
     this.data = new Array(DUNGEON_SIZE);
+    this.cleared = new Array(DUNGEON_SIZE);
     for (var i = 0; i<DUNGEON_SIZE; ++i) {
         this.data[i] = new Array(DUNGEON_SIZE);
         for (var j = 0; j<DUNGEON_SIZE; ++j) {
-            this.data[i][j] = -1;
+            this.data[i][j] = { index: -1, cleared: false };
         }
     }
 
@@ -25,8 +26,13 @@ var Dungeon = function() {
 
     while (roomsLeft > 0 && iteration++<200) {
 
-        if (this.data[x][y] == -1) {
-            this.data[x][y] = nextRoomIndex;
+        if (this.data[x][y].index == -1) {
+
+            if (nextRoomIndex == 0) {
+                this.data[x][y].cleared = true; // no enemy in first room, starts cleared                
+            }
+
+            this.data[x][y].index = nextRoomIndex;
             --roomsLeft;
         }
 
@@ -54,49 +60,55 @@ var Dungeon = function() {
     return this;
 };
 
-Dungeon.prototype.getRoomIndex = function(x, y) {
+Dungeon.prototype.getCurrentRoomData = function() {
 
-    return this.data[x,y];
-}
+    var currentData = this.data[this.currentX][this.currentY];
 
-Dungeon.prototype.getCurrentRoomIndex = function() {
+    currentData.hasLf = (this.currentX >              0) && this.data[this.currentX-1][this.currentY].index != -1;
+    currentData.hasRt = (this.currentX < DUNGEON_SIZE-1) && this.data[this.currentX+1][this.currentY].index != -1;
+    currentData.hasUp = (this.currentY >              0) && this.data[this.currentX][this.currentY-1].index != -1;
+    currentData.hasDw = (this.currentY < DUNGEON_SIZE-1) && this.data[this.currentX][this.currentY+1].index != -1;
 
-    return this.data[this.currentX][this.currentY];
+    return currentData;
 }
 
 Dungeon.prototype.getLeftRoomIndex = function() {
 
-    return this.data[this.currentX-1][this.currentY];
+    return this.data[this.currentX-1][this.currentY].index;
 }
 
 Dungeon.prototype.goLeft = function() {
 
+    this.data[this.currentX][this.currentY].cleared = true;
     this.currentX--;
 }
 
 Dungeon.prototype.getRightRoomIndex = function() {
 
-    return this.data[this.currentX+1][this.currentY];
+    return this.data[this.currentX+1][this.currentY].index;
 }
 
 Dungeon.prototype.goRight = function() {
 
+    this.data[this.currentX][this.currentY].cleared = true;
     this.currentX++;
 }
 
 Dungeon.prototype.getUpRoomIndex = function() {
 
-    return this.data[this.currentX][this.currentY-1];
+    return this.data[this.currentX][this.currentY-1].index;
 }
 
 Dungeon.prototype.goUp = function() {
 
+    this.data[this.currentX][this.currentY].cleared = true;
     this.currentY--;
 }
 
 Dungeon.prototype.getDownRoomIndex = function() {
 
-    return this.data[this.currentX][this.currentY+1];
+    this.data[this.currentX][this.currentY].cleared = true;
+    return this.data[this.currentX][this.currentY+1].index;
 }
 
 Dungeon.prototype.goDown = function() {

@@ -7,9 +7,10 @@ var ROOM_TILE_SKULL = 2;
 var ROOM_COL_COUNT = ROOM_WIDTH / ROOM_TILE_SIZE;
 var ROOM_ROW_COUNT = ROOM_HEIGHT / ROOM_TILE_SIZE;
 
-var Room = function(index) {
+var Room = function(roomInfo) {
 
-    this.index = index;
+    this.index = roomInfo.index;
+    this.cleared = roomInfo.cleared;
 
     // create the gameplay elements arrays
     this.skulls = new Array();
@@ -33,20 +34,72 @@ var Room = function(index) {
             switch (this.json.data[col][row][0]) {
             case ROOM_TILE_WALL:
             {
-                var x = col * ROOM_TILE_SIZE;
-                var y = row * ROOM_TILE_SIZE;
-                var newWall = new Wall(x, y);
-                this.walls.push(newWall);
-                this.wallsInAGrid[col][row] = newWall;
+                this.addWall(col, row, null);
             } break;
             case ROOM_TILE_SKULL:
             {
-                var x = col * ROOM_TILE_SIZE + 16;
-                var y = row * ROOM_TILE_SIZE + 0;
-                this.skulls.push(new Skull(x, y)); break;
+                if (!roomInfo.cleared) {
+                    var x = col * ROOM_TILE_SIZE + 16;
+                    var y = row * ROOM_TILE_SIZE + 0;
+                    this.skulls.push(new Skull(x, y)); break;
+                }
             } break;
             }
         }
+    }
+
+    // left entrance
+    var wallSpriteLf = null;
+    if (!roomInfo.hasLf) {
+       wallSpriteLf = "wall";
+    } else if (!roomInfo.cleared) {
+       wallSpriteLf = "rope_lf";
+    }
+    if (wallSpriteLf)
+    {
+        this.addWall(0, 6, wallSpriteLf);
+        this.addWall(0, 7, wallSpriteLf);
+        this.addWall(0, 8, wallSpriteLf);
+    }
+
+    // right entrance
+    var wallSpriteRt = null;
+    if (!roomInfo.hasRt) {
+       wallSpriteRt = "wall";
+    } else if (!roomInfo.cleared) {
+       wallSpriteRt = "rope_rt";
+    }
+    if (wallSpriteRt)
+    {
+        this.addWall(19, 6, wallSpriteRt);
+        this.addWall(19, 7, wallSpriteRt);
+        this.addWall(19, 8, wallSpriteRt);
+    }
+
+    // top entrance
+    var wallSpriteUp = null;
+    if (!roomInfo.hasUp) {
+       wallSpriteUp = "wall";
+    } else if (!roomInfo.cleared) {
+       wallSpriteUp = "rope_up";
+    }
+    if (wallSpriteUp)
+    {
+        this.addWall(9, 0, wallSpriteUp);
+        this.addWall(10, 0, wallSpriteUp);
+    }
+
+    // bottom entrance
+    var wallSpriteBt = null;
+    if (!roomInfo.hasDw) {
+       wallSpriteBt = "wall";
+    } else if (!roomInfo.cleared) {
+       wallSpriteBt = "rope_dw";
+    }
+    if (wallSpriteBt)
+    {
+        this.addWall(9, 14, wallSpriteBt);
+        this.addWall(10, 14, wallSpriteBt);
     }
 
     this.wrestlerRoot = new Vec2(0, 0);
@@ -54,10 +107,49 @@ var Room = function(index) {
     return this;
 };
 
+Room.prototype.addWall = function(col, row, sprite) {
+
+    var x = col * ROOM_TILE_SIZE;
+    var y = row * ROOM_TILE_SIZE;
+    var newWall = new Wall(x, y, sprite);
+    this.walls.push(newWall);
+    this.wallsInAGrid[col][row] = newWall;    
+}
+
 Room.prototype.update = function(dt) {
 
     for (var i = 0; i<this.skulls.length; ++i) {
         this.skulls[i].update(dt, this.wrestlerRoot);
+    }
+
+    // true when cleared
+    if (this.skulls.length == 0 && !this.cleared)
+    {
+        this.clearRopes();
+        this.cleared = true;
+    }
+}
+
+Room.prototype.clearRopes = function() {
+
+    var i = this.walls.length;
+    while (i--) {
+        if (this.walls[i].isRope)
+        {
+            this.walls.splice(i, 1);
+        }
+    }
+
+    i = ROOM_COL_COUNT;
+    while (i--) {
+        var j = ROOM_ROW_COUNT;
+        while (j--) {
+            if (this.wallsInAGrid[i][j] &&
+                this.wallsInAGrid[i][j].isRope)
+            {
+                this.wallsInAGrid[i][j] = null;
+            }
+        }
     }
 }
 
@@ -87,6 +179,9 @@ Room.prototype.draw = function(stage) {
 
     stage.addChild(this.bitmap);
 
+    for (var i = 0; i<this.walls.length; ++i) {
+        this.walls[i].draw(stage);
+    }
     for (var i = 0; i<this.skulls.length; ++i) {
         this.skulls[i].draw(stage);
     }

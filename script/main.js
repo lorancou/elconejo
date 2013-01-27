@@ -31,6 +31,11 @@ function init() {
 		{src:"./assets/bg/hud.png", id:"hud"},
 		{src:"./assets/sprites/skull.png", id:"skull"},
 		{src:"./assets/sprites/wrestler.png", id:"wrestler"},
+		{src:"./assets/sprites/wall.png", id:"wall"},
+		{src:"./assets/sprites/rope_dw.png", id:"rope_dw"},
+		{src:"./assets/sprites/rope_lf.png", id:"rope_lf"},
+		{src:"./assets/sprites/rope_rt.png", id:"rope_rt"},
+		{src:"./assets/sprites/rope_up.png", id:"rope_up"},
 	];
 	for (var i=0; i<ROOM_COUNT; ++i) {
 	    var zeroedId = zeroFill(i, 2);
@@ -93,7 +98,7 @@ function doneLoading() {
 	hud = new HUD();
 
 	// create a room
-	room = new Room(dungeon.getCurrentRoomIndex());
+	room = new Room(dungeon.getCurrentRoomData());
 
 	// create our wrestler
 	wrestler = new Wrestler();
@@ -126,30 +131,30 @@ function update(dt) {
 	if (topLeft.x < 0) {
 		var index = dungeon.getLeftRoomIndex();
 		if (index != -1) {
-			room = new Room(index);
-			wrestler.changeRoom(DIR_LF);
 			dungeon.goLeft();
+			room = new Room(dungeon.getCurrentRoomData());
+			wrestler.changeRoom(DIR_LF);
 		}
 	} else if (bottomRight.x > ROOM_WIDTH) {
 		var index = dungeon.getRightRoomIndex();
 		if (index != -1) {
-			room = new Room(index);
-			wrestler.changeRoom(DIR_RT);
 			dungeon.goRight();
+			room = new Room(dungeon.getCurrentRoomData());
+			wrestler.changeRoom(DIR_RT);
 		}
 	} else if (topLeft.y < 0) {
 		var index = dungeon.getUpRoomIndex();
 		if (index != -1) {
-			room = new Room(index);
-			wrestler.changeRoom(DIR_UP);
 			dungeon.goUp();
+			room = new Room(dungeon.getCurrentRoomData());
+			wrestler.changeRoom(DIR_UP);
 		}
 	} else if (bottomRight.y > ROOM_HEIGHT) {
 		var index = dungeon.getDownRoomIndex();
 		if (index != -1) {
-			room = new Room(index);
-			wrestler.changeRoom(DIR_DW);
 			dungeon.goDown();
+			room = new Room(dungeon.getCurrentRoomData());
+			wrestler.changeRoom(DIR_DW);
 		}
 	}
 }
