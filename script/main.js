@@ -15,6 +15,7 @@ var heart;
 var score;
 var multiplier;
 var hud;
+var dungeon;
 var room;
 var wrestler;
 
@@ -82,6 +83,8 @@ function doneLoading() {
 	
 	clearInterval(loadingInterval);
 
+	dungeon = new Dungeon();
+
 	heart = new Heart();
 
 	score = 0;
@@ -90,7 +93,7 @@ function doneLoading() {
 	hud = new HUD();
 
 	// create a room
-	room = new Room(0);
+	room = new Room(dungeon.getCurrentRoomIndex());
 
 	// create our wrestler
 	wrestler = new Wrestler();
@@ -121,18 +124,34 @@ function update(dt) {
 	var topLeft = getTopLeft(wrestler.hitBox);
 	var bottomRight = getBotRight(wrestler.hitBox);
 	if (topLeft.x < 0) {
-		room = new Room((room.index + ROOM_COUNT - 1) % ROOM_COUNT);
-		wrestler.changeRoom(DIR_LF);
+		var index = dungeon.getLeftRoomIndex();
+		if (index != -1) {
+			room = new Room(index);
+			wrestler.changeRoom(DIR_LF);
+			dungeon.goLeft();
+		}
 	} else if (bottomRight.x > ROOM_WIDTH) {
-		room = new Room((room.index + 1) % ROOM_COUNT);
-		wrestler.changeRoom(DIR_RT);
+		var index = dungeon.getRightRoomIndex();
+		if (index != -1) {
+			room = new Room(index);
+			wrestler.changeRoom(DIR_RT);
+			dungeon.goRight();
+		}
 	} else if (topLeft.y < 0) {
-		room = new Room((room.index + ROOM_COUNT - 1) % ROOM_COUNT);
-		wrestler.changeRoom(DIR_UP);
+		var index = dungeon.getUpRoomIndex();
+		if (index != -1) {
+			room = new Room(index);
+			wrestler.changeRoom(DIR_UP);
+			dungeon.goUp();
+		}
 	} else if (bottomRight.y > ROOM_HEIGHT) {
-		room = new Room((room.index + 1) % ROOM_COUNT);
-		wrestler.changeRoom(DIR_DW);
-	}	
+		var index = dungeon.getDownRoomIndex();
+		if (index != -1) {
+			room = new Room(index);
+			wrestler.changeRoom(DIR_DW);
+			dungeon.goDown();
+		}
+	}
 }
 
 function updateScoring(dt, heart, InteractionResult) {

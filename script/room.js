@@ -69,11 +69,15 @@ Room.prototype.handleInteractions = function(punchBox, hitBox) {
     while (i--) {
 
         var skullResult = this.skulls[i].handleInteractions(punchBox, hitBox);
+        result.apply(skullResult);
+
         if (this.skulls[i].hp == 0) {
             this.skulls.splice(i, 1);
         }
 
-        result.apply(skullResult);
+        if (skullResult.hit) {
+            break;
+        }
     }
 
     return result;

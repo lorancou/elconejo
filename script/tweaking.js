@@ -13,10 +13,13 @@ var SKULL_HP = 3;
 var SKULL_VALUE = 1;
 var SKULL_HEAL = 1;
 var SKULL_DAMAGE = 1;
-var SKULL_MOVE_SPEED = 160; //Vitesse en pixels par seconde.
+var SKULL_MOVE_SPEED = 96; //Vitesse en pixels par seconde.
 
 //**** Room control **********************************************************
 
+var DUNGEON_SIZE = 8; // 8x8 = 64
+var DUNGEON_ROOM_COUNT_MIN = 20;
+var DUNGEON_ROOM_COUNT_MAX = 30;
 var ROOM_COUNT = 17;
 
 //**** El Conejo the Wrestler *************************************************

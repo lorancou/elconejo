@@ -58,7 +58,7 @@ Skull.prototype.update = function(dt, wrestlerRoot) {
             wrestlerRoot.y - root.y
             );
         dir.normalize();
-        dir.mulS(SKULL_MOVE_SPEED * dt / 1000);
+        dir = dir.mulS(SKULL_MOVE_SPEED * dt / 1000);
 
         var newDir = null;
         if (Math.abs(dir.x) > Math.abs(dir.y)) {
