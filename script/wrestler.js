@@ -20,6 +20,7 @@ var Wrestler = function() {
     this.state = STATE_RUN;
 
     this.punchBox = null;
+    this.punchHit = false;
 
     var ss = new createjs.SpriteSheet({
         "frames": {
@@ -45,6 +46,8 @@ Wrestler.prototype.update = function(dt, room) {
 
     var newX = this.sprite.x;
     var newY = this.sprite.y;
+
+    var frameStats = new FrameStats();
 
     switch (this.state) {
 
@@ -81,9 +84,20 @@ Wrestler.prototype.update = function(dt, room) {
                 WRESTLER_PUNCHBOX[this.dir].height
                 );
 
+            var punchStats = room.handlePunch(this.punchBox);
+            if (punchStats.hit) {
+                this.punchHit = true; // no miss
+            }
+            frameStats.apply(punchStats); 
+
         } else {
 
             this.punchBox = null;
+
+            if (!this.punchHit) {
+                frameStats.miss = true;
+            }
+            this.punchHit = false; 
 
             // back to run when done punching
             this.setState(STATE_RUN);
@@ -148,6 +162,8 @@ Wrestler.prototype.update = function(dt, room) {
 
     this.sprite.x = this.hitBox.x - WRESTLER_HITBOX.x;
     this.sprite.y = this.hitBox.y - WRESTLER_HITBOX.y;
+
+    return frameStats;
 }
 
 Wrestler.prototype.draw = function(stage) {

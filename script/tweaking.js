@@ -1,13 +1,16 @@
 "use strict";
 
-//**** Heart beat control ****************************************************
+//**** Heart beat & scoring control ******************************************
 
 // ms
 var HEARTBEAT_LEVELS = [
-	{ delay: 1000, beat:  800 },
-	{ delay:  500, beat:  250 },
-	{ delay:  200, beat:  100 },
+	{ hpStart:  0, hpEnd:  40, delay: 1000, beat:  800 }, 
+	{ hpStart: 41, hpEnd:  80, delay:  750, beat:  500 },
+	{ hpStart: 81, hpEnd: 120, delay:  500, beat:  300 },
 ];
+
+var SKULL_VALUE = 1;
+var SKULL_HP_BONUS = 1;
 
 //**** Room control **********************************************************
 

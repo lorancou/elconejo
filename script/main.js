@@ -12,6 +12,8 @@ var stage;
 
 // Gameplay
 var heart;
+var score;
+var multiplier;
 var hud;
 var room;
 var wrestler;
@@ -82,6 +84,9 @@ function doneLoading() {
 
 	heart = new Heart();
 
+	score = 0;
+	multiplier = 1;
+
 	hud = new HUD();
 
 	// create a room
@@ -104,10 +109,11 @@ function doneLoading() {
 function update(dt) {
 
 	// game objects updates
-	heart.update(dt);
-	wrestler.update(dt, room);
-	room.update(dt, wrestler);
-	hud.update(dt, heart);
+	var frameStats = wrestler.update(dt, room);
+	room.update(dt);
+	heart.update(dt, frameStats);
+	updateScoring(dt, heart, frameStats);
+	hud.update(dt, heart, score, multiplier);
 
 	draw();
 
@@ -127,6 +133,17 @@ function update(dt) {
 		room = new Room((room.index + 1)%4);
 		wrestler.changeRoom(DIR_DW);
 	}	
+}
+
+function updateScoring(dt, heart, frameStats) {
+
+	score += frameStats.score * multiplier;
+
+	if (frameStats.hit && heart.beat) {
+		multiplier++;
+	} else if (frameStats.miss && !heart.beat) {
+		multiplier = Math.max(multiplier-1, 0);
+	}
 }
 
 function draw() {

@@ -47,30 +47,40 @@ var Room = function(index) {
     return this;
 };
 
-Room.prototype.update = function(dt, wrestler) {
+Room.prototype.update = function(dt) {
 
     for (var i = 0; i<this.skulls.length; ++i) {
-        if (!this.skulls[i]) {
-            continue;
-        }
-
         this.skulls[i].update(dt);
+    }
+}
 
-        // hits
-        if (wrestler.punchBox) {
-            var hitBox = new createjs.Rectangle(
-                this.skulls[i].anim.x + SKULL_HITBOX.x,
-                this.skulls[i].anim.y + SKULL_HITBOX.y,
-                SKULL_HITBOX.width,
-                SKULL_HITBOX.height
-                );
-            if (rectIntersect(hitBox, wrestler.punchBox)) {
-                this.skulls[i] = null;
-                //score += 1;
-                //scoreDiv.innerHTML = score;
+Room.prototype.handlePunch = function(punchBox) {
+
+    var punchStats = new FrameStats(); 
+
+    var i = this.skulls.length;
+    while (i--) {
+
+        var hitBox = new createjs.Rectangle(
+            this.skulls[i].anim.x + SKULL_HITBOX.x,
+            this.skulls[i].anim.y + SKULL_HITBOX.y,
+            SKULL_HITBOX.width,
+            SKULL_HITBOX.height
+            );
+
+        if (rectIntersect(hitBox, punchBox)) {
+
+            var skull = this.skulls[i];
+            punchStats.hit = true; 
+            if (true) { // TODO: skull dead
+                this.skulls.splice(i, 1);
+                punchStats.hp += SKULL_HP_BONUS;
+                punchStats.score += SKULL_VALUE;
             }
         }
     }
+
+    return punchStats;
 }
 
 Room.prototype.draw = function(stage) {
@@ -78,9 +88,6 @@ Room.prototype.draw = function(stage) {
     stage.addChild(this.bitmap);
 
     for (var i = 0; i<this.skulls.length; ++i) {
-        if (!this.skulls[i]) {
-            continue;
-        }
         stage.addChild(this.skulls[i].anim);
     }
 }

@@ -9,11 +9,17 @@ var HUD = function() {
     this.bitmap = new createjs.Bitmap(imagePool["hud"]);
     this.bitmap.y = HUD_Y;
 
-	this.heartText = new createjs.Text("-", "bold 24px Arial", "#000000");
-	this.heartText.maxWidth = HUD_WIDTH;
-	this.heartText.textAlign = "center";
-	this.heartText.x = 50;
-	this.heartText.y = HUD_Y + HUD_HEIGHT / 2 - 20;
+	this.beatText = new createjs.Text("-", "bold 24px Arial", "#000000");
+	this.beatText.maxWidth = HUD_WIDTH;
+	this.beatText.textAlign = "center";
+	this.beatText.x = 50;
+	this.beatText.y = HUD_Y + HUD_HEIGHT / 2 - 20;
+
+	this.hpText = new createjs.Text("-", "bold 24px Arial", "#000000");
+	this.hpText.maxWidth = HUD_WIDTH;
+	this.hpText.textAlign = "center";
+	this.hpText.x = 120;
+	this.hpText.y = HUD_Y + HUD_HEIGHT / 2 - 20;
 
 	this.scoreText = new createjs.Text("-", "bold 24px Arial", "#000000");
 	this.scoreText.maxWidth = HUD_WIDTH;
@@ -30,19 +36,21 @@ var HUD = function() {
     return this;
 };
 
-HUD.prototype.update = function(dt, heart) {
+HUD.prototype.update = function(dt, heart, score, multiplier) {
 
-	this.heartText.text = heart.beat ? "BEAT" : "-";
+	this.beatText.text = heart.beat ? "BEAT" : "-";
+	this.hpText.text = heart.hp;
 
-	this.scoreText.text = "score";
+	this.scoreText.text = score;
 
-	this.multiplierText.text = "mult";
+	this.multiplierText.text = multiplier;
 }
 
 HUD.prototype.draw = function(stage) {
 
     stage.addChild(this.bitmap);
-    stage.addChild(this.heartText);	
+    stage.addChild(this.beatText);	
+    stage.addChild(this.hpText);	
     stage.addChild(this.scoreText);	
     stage.addChild(this.multiplierText);	
 }

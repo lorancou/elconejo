@@ -118,3 +118,21 @@ function assert(cond) {
 		//window.alert(cond);
 	}
 }
+
+var FrameStats = function() {
+	this.hp = 0;
+	this.score = 0;
+	this.hit = false;
+	this.miss = false;
+}
+
+FrameStats.prototype.apply = function(other) {
+	this.hp += other.hp;
+	this.score += other.score;
+	this.hit = this.hit || other.hit;
+	this.miss = this.miss || other.miss;
+}
+
+function clamp(value, min, max) {
+	return Math.max(Math.min(value, max), min);
+}
