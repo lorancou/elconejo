@@ -140,10 +140,12 @@ Skull.prototype.handleInteractions = function(punchBox, hitBox) {
     }
 
     if (this.state == STATE_RUN) {
-        if (rectIntersect(this.hitBox, hitBox)) {
+        if (hitBox) {
+            if (rectIntersect(this.hitBox, hitBox)) {
 
-            result.hp -= SKULL_DAMAGE;
-            this.setState(STATE_PUNCH);
+                result.hp -= SKULL_DAMAGE;
+                this.setState(STATE_PUNCH);
+            }
         }
     }
 
