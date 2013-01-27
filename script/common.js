@@ -55,25 +55,25 @@ function getTileIndex(pos) {
 }
 
 function getTopLeft(entity) {
-    return new Vector2(
+    return new Vec2(
     	entity.x,
     	entity.y
     	);
 }
 function getTopRight(entity) {
-    return new Vector2(
+    return new Vec2(
     	entity.x + entity.width,
     	entity.y
     	);
 }
 function getBotLeft(entity) {
-    return new Vector2(
+    return new Vec2(
     	entity.x,
     	entity.y + entity.height
     	);
 }
 function getBotRight(entity) {
-    return new Vector2(
+    return new Vec2(
     	entity.x + entity.width,
     	entity.y + entity.height
     	);
@@ -89,11 +89,6 @@ function getTop(entity) {
 }
 function getBottom(entity) {
     return entity.y + entity.height;
-}
-
-var Vector2 = function(x, y) {
-	this.x = x;
-	this.y = y;
 }
 
 function assert(cond) {

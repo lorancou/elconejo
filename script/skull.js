@@ -12,8 +12,6 @@ var Skull = function(x, y) {
 
     this.hp = SKULL_HP;
 
-    this.hitBox = null;
-
     var ss = new createjs.SpriteSheet({
         "frames": {
             "width": SKULL_SIZE,
@@ -29,10 +27,21 @@ var Skull = function(x, y) {
     this.sprite.y = this.y - SKULL_SIZE / 2;
     this.sprite.gotoAndPlay("run_dw");
                             
+    this.hitBox = new createjs.Rectangle(
+        this.sprite.x + SKULL_HITBOX.x,
+        this.sprite.y + SKULL_HITBOX.y,
+        SKULL_HITBOX.width,
+        SKULL_HITBOX.height
+        );    
+
     return this;
 };
 
-Skull.prototype.update = function(dt) {
+Skull.prototype.update = function(dt, wrestlerRoot) {
+
+    var root = new Vec2(0, 0);
+    root.x = this.hitBox.x + this.hitBox.width / 2;
+    root.y = this.hitBox.y + this.hitBox.height / 2; 
 
     switch (this.state) {
 
@@ -42,12 +51,16 @@ Skull.prototype.update = function(dt) {
 
     case STATE_RUN: {
 
+        var dir = new Vec2(
+            wrestlerRoot.x - root.x,
+            wrestlerRoot.y - root.y
+            );
+        dir.normalize();
+        dir.mulS(SKULL_MOVE_SPEED * dt / 1000);
+
     } break;
 
     }
-
-    this.sprite.x = this.x - SKULL_SIZE / 2;
-    this.sprite.y = this.y - SKULL_SIZE / 2;
 
     this.hitBox = new createjs.Rectangle(
         this.sprite.x + SKULL_HITBOX.x,
@@ -55,6 +68,11 @@ Skull.prototype.update = function(dt) {
         SKULL_HITBOX.width,
         SKULL_HITBOX.height
         );    
+
+    uberResolve(room, this.hitBox, dir.x, dir.y);
+
+    this.sprite.x = this.hitBox.x - SKULL_HITBOX.x;
+    this.sprite.y = this.hitBox.y - SKULL_HITBOX.y;
 }
 
 Skull.prototype.setState = function(state) {

@@ -107,33 +107,20 @@ Wrestler.prototype.update = function(dt, room) {
 
     }
 
-    // resolve along x
-
     this.hitBox = new createjs.Rectangle(
-        newX + WRESTLER_HITBOX.x,
+        this.sprite.x + WRESTLER_HITBOX.x,
         this.sprite.y + WRESTLER_HITBOX.y,
         WRESTLER_HITBOX.width,
         WRESTLER_HITBOX.height
         );
 
-    if (newX < this.sprite.x) {
-        resolveLeft(room, this.hitBox);
-    } else if (newX > this.sprite.x) {
-        resolveRight(room, this.hitBox);
-    }
-
-    // resolve along y
-
-    this.hitBox.y = newY + WRESTLER_HITBOX.y;
-
-    if (newY < this.sprite.y) {
-        resolveUp(room, this.hitBox);
-    } else if (newY > this.sprite.y) {
-        resolveDown(room, this.hitBox);
-    }
+    uberResolve(room, this.hitBox, newX - this.sprite.x, newY - this.sprite.y);
 
     this.sprite.x = this.hitBox.x - WRESTLER_HITBOX.x;
     this.sprite.y = this.hitBox.y - WRESTLER_HITBOX.y;
+
+    room.wrestlerRoot.x = this.hitBox.x + this.hitBox.width / 2;
+    room.wrestlerRoot.y = this.hitBox.y + this.hitBox.height / 2; 
 
     return frameStats;
 }

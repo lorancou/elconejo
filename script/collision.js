@@ -16,6 +16,30 @@ function rectIntersect(rectA, rectB) {
             ay2 > by1; 
 }
 
+function uberResolve(room, hitBox, dx, dy) {
+
+    // resolve along x
+
+    hitBox.x += dx;
+
+    if (dx < 0) {
+        resolveLeft(room, hitBox);
+    } else if (dx > 0) {
+        resolveRight(room, hitBox);
+    }
+
+    // resolve along y
+
+    hitBox.y += dy;
+
+    if (dy < 0) {
+        resolveUp(room, hitBox);
+    } else if (dy > 0) {
+        resolveDown(room, hitBox);
+    }
+
+}
+
 function resolveLeft(room, hitBox) {
 
     var topLeft = getTopLeft(hitBox);

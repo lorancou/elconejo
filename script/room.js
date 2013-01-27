@@ -49,13 +49,15 @@ var Room = function(index) {
         }
     }
 
+    this.wrestlerRoot = new Vec2(0, 0);
+
     return this;
 };
 
-Room.prototype.update = function(dt, wrestler) {
+Room.prototype.update = function(dt) {
 
     for (var i = 0; i<this.skulls.length; ++i) {
-        this.skulls[i].update(dt, wrestler);
+        this.skulls[i].update(dt, this.wrestlerRoot);
     }
 }
 
