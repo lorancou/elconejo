@@ -107,57 +107,29 @@ Wrestler.prototype.update = function(dt, room) {
 
     }
 
+    // resolve along x
+
     this.hitBox = new createjs.Rectangle(
         newX + WRESTLER_HITBOX.x,
-        newY + WRESTLER_HITBOX.y,
+        this.sprite.y + WRESTLER_HITBOX.y,
         WRESTLER_HITBOX.width,
         WRESTLER_HITBOX.height
         );
 
-    var topLeft = getTopLeft(this.hitBox);
-    var botLeft = getBotLeft(this.hitBox);
-    var topRight = getTopRight(this.hitBox);
-    var botRight = getBotRight(this.hitBox);
-
-    var wallTopLeft = room.getWallAt(topLeft);
-    var wallBotLeft = room.getWallAt(botLeft);
-    var wallTopRight = room.getWallAt(topRight);
-    var wallBotRight = room.getWallAt(botRight);
-
     if (newX < this.sprite.x) {
-        if (wallTopLeft) {
-            wallTopLeft.touched = true;
-            this.hitBox.x = getRight(wallTopLeft);
-        } else if (wallBotLeft) {
-            wallBotLeft.touched = true;
-            this.hitBox.x = getRight(wallBotLeft);
-        }
+        resolveLeft(room, this.hitBox);
     } else if (newX > this.sprite.x) {
-        if (wallTopRight) {
-            wallTopRight.touched = true;
-            this.hitBox.x = getLeft(wallTopRight) - ROOM_TILE_SIZE - 1; // hack
-        } else if (wallBotRight) {
-            wallBotRight.touched = true;
-            this.hitBox.x = getLeft(wallBotRight) - ROOM_TILE_SIZE - 1; // hack
-        }
+        resolveRight(room, this.hitBox);
     }
 
+    // resolve along y
+
+    this.hitBox.y = newY + WRESTLER_HITBOX.y;
+
     if (newY < this.sprite.y) {
-        if (wallTopLeft) {
-            wallTopLeft.touched = true;
-            this.hitBox.y = getBottom(wallTopLeft);
-        } else if (wallTopRight) {
-            wallTopRight.touched = true;
-            this.hitBox.y = getBottom(wallTopRight);
-        }
+        resolveUp(room, this.hitBox);
     } else if (newY > this.sprite.y) {
-        if (wallBotLeft) {
-            wallBotLeft.touched = true;
-            this.hitBox.y = getTop(wallBotLeft) - ROOM_TILE_SIZE - 1; // hack
-        } else if (wallBotRight) {
-            wallBotRight.touched = true;
-            this.hitBox.y = getTop(wallBotRight) - ROOM_TILE_SIZE - 1; // hack
-        }
+        resolveDown(room, this.hitBox);
     }
 
     this.sprite.x = this.hitBox.x - WRESTLER_HITBOX.x;

@@ -14,7 +14,7 @@ var SKULL_HP_BONUS = 1;
 
 //**** Room control **********************************************************
 
-var ROOM_COUNT = 5;
+var ROOM_COUNT = 17;
 
 //**** El Conejo the Wrestler *************************************************
 

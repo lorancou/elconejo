@@ -47,10 +47,10 @@ var Room = function(index) {
     return this;
 };
 
-Room.prototype.update = function(dt) {
+Room.prototype.update = function(dt, wrestler) {
 
     for (var i = 0; i<this.skulls.length; ++i) {
-        this.skulls[i].update(dt);
+        this.skulls[i].update(dt, wrestler);
     }
 }
 
