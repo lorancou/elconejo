@@ -22,7 +22,7 @@ var Wrestler = function() {
     this.punchBox = null;
     this.punchHit = false;
 
-    var ss = new createjs.SpriteSheet({
+    this.sheet = new createjs.SpriteSheet({
         "frames": {
             "width": WRESTLER_SIZE,
             "height": WRESTLER_SIZE
@@ -31,7 +31,7 @@ var Wrestler = function() {
         "images": ["./assets/sprites/wrestler.png"]
     });
 
-    this.sprite = new createjs.BitmapAnimation(ss);
+    this.sprite = new createjs.BitmapAnimation(this.sheet);
     this.sprite.scaleY = this.sprite.scaleX = 1;
     this.sprite.x = 320;
     this.sprite.y = 240;
@@ -56,25 +56,57 @@ Wrestler.prototype.update = function(dt, room) {
     } break;
 
     case STATE_RUN: {
+
+        var newDir = -1;
+
         // move
+        var somethingHeld = false;
         if (this.dwHeld) {
             newY = Math.round(this.sprite.y + WRESTLER_MOVE_SPEED * dt / 1000);
+            somethingHeld = true;
+            newDir = DIR_DW;
         }
         if (this.lfHeld) {
             newX = Math.round(this.sprite.x - WRESTLER_MOVE_SPEED * dt / 1000);
+            somethingHeld = true;
+            newDir = DIR_LF;
         }
         if (this.rtHeld) {
             newX = Math.round(this.sprite.x + WRESTLER_MOVE_SPEED * dt / 1000);
+            somethingHeld = true;
+            newDir = DIR_RT;
         }
         if (this.upHeld) {
             newY = Math.round(this.sprite.y - WRESTLER_MOVE_SPEED * dt / 1000);
+            somethingHeld = true;
+            newDir = DIR_UP;
+        }
+
+        if (newDir != -1) {
+            this.dir = newDir;
+        }
+
+        //if (newDir != -1 && newDir != this.dir) {
+        //this.setState(STATE_RUN);
+        //}
+
+        var anim = "run" + getDirSuffix(this.dir);
+        if (this.sprite.currentAnimation != anim) {
+            this.sprite.gotoAndPlay(anim);
+        }
+
+
+
+        if (!somethingHeld) {
+            this.setState(STATE_IDLE);
         }
 
     } break;
 
     case STATE_PUNCH: {
 
-        if (this.sprite.currentAnimationFrame < 3) {
+        var frameCount = this.sheet.getNumFrames(this.sprite.currentAnimation);
+        if (this.sprite.currentAnimationFrame < frameCount-1) {
 
             // detect hits & damage
             if (this.punchHit) {
@@ -166,7 +198,7 @@ Wrestler.prototype.debugDraw = function(g, stage) {
 
 Wrestler.prototype.handleKeyDown = function(e) {
 
-    var newDir = null;
+    var newDir = -1;
 
     switch(e.keyCode) {
         case KEYCODE_DW: this.dwHeld = true; newDir = DIR_DW; break;
@@ -175,15 +207,15 @@ Wrestler.prototype.handleKeyDown = function(e) {
         case KEYCODE_UP: this.upHeld = true; newDir = DIR_UP; break;
     }
 
-    if (newDir != null && newDir != this.dir) {
+    if (this.state == STATE_IDLE && newDir != -1) {
+
         this.dir = newDir;
-        if (this.state == STATE_RUN) {
-            this.setState(STATE_RUN);
-        }
-        return false;
+
+        this.setState(STATE_RUN);
     }
+
     //console.log("Unhandled key: " + e.keyCode);
-    return true;
+    return false;
 }
 
 Wrestler.prototype.handleKeyUp = function(e) {
@@ -197,20 +229,24 @@ Wrestler.prototype.handleKeyUp = function(e) {
         // punch
         case KEYCODE_PUNCH_1:
         case KEYCODE_PUNCH_2: {
-            if (this.state == STATE_RUN) {
+            if (this.state == STATE_RUN || this.state == STATE_IDLE) {
                 this.setState(STATE_PUNCH);
-                return false;
             }
         }
     }
 
-    return true;
+    return false;
 }
 
 Wrestler.prototype.setState = function(state) {
 
     this.state = state;
     switch (state) {
+
+    case STATE_IDLE: {
+        var newAnim = "idle" + getDirSuffix(this.dir);
+        this.sprite.gotoAndPlay(newAnim);
+    } break;
 
     case STATE_RUN: {
         var newAnim = "run" + getDirSuffix(this.dir);

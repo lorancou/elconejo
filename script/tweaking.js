@@ -9,11 +9,11 @@ var HEARTBEAT_LEVELS = [
 	{ hpStart: 81, hpEnd: 120, delay: 1000, beat:  500 },
 ];
 
-var SKULL_HP = 3;
-var SKULL_VALUE = 1;
-var SKULL_HEAL = 1;
+var SKULL_HP = 1;
+var SKULL_VALUE = 5;
+var SKULL_HEAL = 5;
 var SKULL_DAMAGE = 1;
-var SKULL_MOVE_SPEED = 96; //Vitesse en pixels par seconde.
+var SKULL_MOVE_SPEED = 80; //Vitesse en pixels par seconde.
 
 //**** Room control **********************************************************
 
@@ -38,6 +38,13 @@ var WRESTLER_ANIMS = {
 	punch_lf: [25, 29, false, 2],
 	punch_rt: [30, 34, false, 2],
 	punch_up: [35, 39, false, 2],
+
+	idle_dw: [40, 41, "idle_dw", 10],
+	idle_lf: [42, 43, "idle_lf", 10],
+	idle_rt: [44, 45, "idle_rt", 10],
+	idle_up: [46, 47, "idle_up", 10],
+
+	take_damage: [60, 60, false, 1],
 };
 
 var WRESTLER_HITBOX = { x: 32, y: 64, width: 32, height: 32 };

@@ -1,7 +1,7 @@
 "use strict";
 
 var HUD_WIDTH = 640;
-var HUD_HEIGHT = 64;
+var HUD_HEIGHT = 96;
 var HUD_Y = ROOM_HEIGHT;
 
 var HUD = function() {
