@@ -36,6 +36,7 @@ function init() {
 		{src:"./assets/sprites/rope_dw.png", id:"rope_dw"},
 		{src:"./assets/sprites/rope_lf.png", id:"rope_lf"},
 		{src:"./assets/sprites/rope_rt.png", id:"rope_rt"},
+		{src:"./assets/sprites/rope_up.png", id:"rope_up"},
 		{src:"./assets/sprites/heart.png", id:"heart"},
 	];
 	for (var i=0; i<ROOM_COUNT; ++i) {
