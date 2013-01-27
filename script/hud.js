@@ -30,19 +30,19 @@ var HUD = function() {
     this.beatSprite.y = 465;
     this.beatSprite.gotoAndPlay("delay");
 
-	this.hpText = new createjs.Text("-", "24px m04_fatal_furyregular", "#000000");
+	this.hpText = new createjs.Text("-", "24px m04_fatal_furyregular", "#FFFFFF");
 	this.hpText.maxWidth = HUD_WIDTH;
 	this.hpText.textAlign = "right";
 	this.hpText.x = 170;
 	this.hpText.y = HUD_Y + HUD_HEIGHT / 2 - 30;
 
-	this.scoreText = new createjs.Text("-", "24px m04_fatal_furyregular", "#000000");
+	this.scoreText = new createjs.Text("-", "24px m04_fatal_furyregular", "#FFFFFF");
 	this.scoreText.maxWidth = HUD_WIDTH;
 	this.scoreText.textAlign = "center";
 	this.scoreText.x = 320;
 	this.scoreText.y = HUD_Y + HUD_HEIGHT / 2 - 10;
 
-	this.multiplierText = new createjs.Text("-", "24px m04_fatal_furyregular", "#000000");
+	this.multiplierText = new createjs.Text("-", "24px m04_fatal_furyregular", "#FFFFFF");
 	this.multiplierText.maxWidth = HUD_WIDTH;
 	this.multiplierText.textAlign = "right";
 	this.multiplierText.x = 580;
@@ -58,6 +58,9 @@ HUD.prototype.update = function(dt, heart, score, multiplier) {
 	if (heart.beat) {
 		if (this.beatSprite.currentAnimation != "beat") {
 		    this.beatSprite.gotoAndPlay("beat");
+
+		    // SFX
+			createjs.SoundJS.play("heartbeat" + heart.level);
 		}
 	} else {
 		this.beatSprite.gotoAndPlay("delay");

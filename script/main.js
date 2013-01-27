@@ -38,6 +38,9 @@ function init() {
 		{src:"./assets/sprites/rope_rt.png", id:"rope_rt"},
 		{src:"./assets/sprites/rope_up.png", id:"rope_up"},
 		{src:"./assets/sprites/heart.png", id:"heart"},
+		{src:"./assets/sfx/heartbeat0.ogg", id:"heartbeat0"},
+		{src:"./assets/sfx/heartbeat1.ogg", id:"heartbeat1"},
+		{src:"./assets/sfx/heartbeat2.ogg", id:"heartbeat2"},
 	];
 	for (var i=0; i<ROOM_COUNT; ++i) {
 	    var zeroedId = zeroFill(i, 2);
@@ -45,9 +48,13 @@ function init() {
 		manifest.push({src:"./assets/rooms/room"+zeroedId+".json", id:"room"+zeroedId});
 	}
 
+	var soundJSOK = createjs.SoundJS.checkPlugin(true);
+	assert(soundJSOK);
+
 	preload = new createjs.PreloadJS();
     preload.onFileLoad = handleFileLoad;
 	preload.onComplete = doneLoading;
+	preload.installPlugin(createjs.SoundJS);
 	preload.loadManifest(manifest);
 
 	messageField = new createjs.Text("Loading", "bold 24px Arial", "#000000");
@@ -100,9 +107,9 @@ function doneLoading() {
 	hud = new HUD();
 
 	// create a room
-	//var data = dungeon.getCurrentRoomData();
-	//data.index = 20;
-	//room = new Room(data);
+	/*var data = dungeon.getCurrentRoomData();
+	data.index = 19;
+	room = new Room(data);*/
 	room = new Room(dungeon.getCurrentRoomData());
 
 	// create our wrestler
