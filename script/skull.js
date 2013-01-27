@@ -11,6 +11,7 @@ var Skull = function(x, y, isTequila) {
 
     this.dir = DIR_DW;
     this.state = STATE_RUN;
+    this.timer = 0;
 
     this.hp = isTequila ? TEQUILA_HP : SKULL_HP;
     this.pushBack = 0;
@@ -85,40 +86,44 @@ Skull.prototype.update = function(dt, wrestlerRoot) {
             wrestlerRoot.y - root.y
             );
 
-        dir.normalize();
-        var moveSpeed = this.isTequila ? TEQUILA_MOVE_SPEED : SKULL_MOVE_SPEED;
-        dir = dir.mulS(moveSpeed * dt / 1000);
+        if (dir.length() < ENEMY_AGGRO_RADIUS &&
+            this.timer > 1000) {
 
-        var newDir = null;
-        if (Math.abs(dir.x) > Math.abs(dir.y)) {
-            if (dir.x > 0) {
-                newDir = DIR_RT;
+            dir.normalize();
+            var moveSpeed = this.isTequila ? TEQUILA_MOVE_SPEED : SKULL_MOVE_SPEED;
+            dir = dir.mulS(moveSpeed * dt / 1000);
+
+            var newDir = null;
+            if (Math.abs(dir.x) > Math.abs(dir.y)) {
+                if (dir.x > 0) {
+                    newDir = DIR_RT;
+                } else {
+                    newDir = DIR_LF;
+                }
             } else {
-                newDir = DIR_LF;
+                if (dir.y > 0) {
+                    newDir = DIR_DW;
+                } else {
+                    newDir = DIR_UP;
+                }
             }
-        } else {
-            if (dir.y > 0) {
-                newDir = DIR_DW;
-            } else {
-                newDir = DIR_UP;
+            if (newDir != this.dir) {
+                this.dir = newDir;
+                this.setState(STATE_RUN);
             }
+
+            this.hitBox = new createjs.Rectangle(
+                this.sprite.x + SKULL_HITBOX.x,
+                this.sprite.y + SKULL_HITBOX.y,
+                SKULL_HITBOX.width,
+                SKULL_HITBOX.height
+                );    
+
+            uberResolve(room, this.hitBox, dir.x, dir.y);
+
+            this.sprite.x = this.hitBox.x - SKULL_HITBOX.x;
+            this.sprite.y = this.hitBox.y - SKULL_HITBOX.y;
         }
-        if (newDir != this.dir) {
-            this.dir = newDir;
-            this.setState(STATE_RUN);
-        }
-
-        this.hitBox = new createjs.Rectangle(
-            this.sprite.x + SKULL_HITBOX.x,
-            this.sprite.y + SKULL_HITBOX.y,
-            SKULL_HITBOX.width,
-            SKULL_HITBOX.height
-            );    
-
-        uberResolve(room, this.hitBox, dir.x, dir.y);
-
-        this.sprite.x = this.hitBox.x - SKULL_HITBOX.x;
-        this.sprite.y = this.hitBox.y - SKULL_HITBOX.y;
     } break;
 
     case STATE_PUNCH: {
@@ -131,6 +136,8 @@ Skull.prototype.update = function(dt, wrestlerRoot) {
     } break;
 
     }
+
+    this.timer += dt;
 }
 
 Skull.prototype.setState = function(state) {
