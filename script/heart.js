@@ -12,7 +12,7 @@ var Heart = function() {
     return this;
 };
 
-Heart.prototype.update = function(dt, InteractionResult) {
+Heart.prototype.update = function(dt, interacResult) {
 
     this.timer += dt;
 
@@ -30,7 +30,7 @@ Heart.prototype.update = function(dt, InteractionResult) {
         }
     }
 
-    this.hp = clamp(this.hp + InteractionResult.hp, 0, this.HP_MAX);
+    this.hp = clamp(this.hp + interacResult.hp, 0, this.HP_MAX);
     if (this.hp == 0) {
         // R.I.P
     } else if (this.hp < HEARTBEAT_LEVELS[this.level].hpStart) {

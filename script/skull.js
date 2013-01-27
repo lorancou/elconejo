@@ -13,6 +13,7 @@ var Skull = function(x, y, isTequila) {
     this.state = STATE_RUN;
 
     this.hp = isTequila ? TEQUILA_HP : SKULL_HP;
+    this.pushBack = 0;
 
     this.sheet = new createjs.SpriteSheet({
         "frames": {
@@ -45,7 +46,31 @@ Skull.prototype.update = function(dt, wrestlerRoot) {
 
     var root = new Vec2(0, 0);
     root.x = this.hitBox.x + this.hitBox.width / 2;
-    root.y = this.hitBox.y + this.hitBox.height / 2; 
+    root.y = this.hitBox.y + this.hitBox.height / 2;
+
+    if (this.pushBack) {
+
+        var dir = new Vec2(
+            root.x - wrestlerRoot.x,
+            root.y - wrestlerRoot.y
+            );
+        dir.normalize();
+        dir = dir.mulS(this.pushBack);
+
+        this.hitBox = new createjs.Rectangle(
+            this.sprite.x + SKULL_HITBOX.x,
+            this.sprite.y + SKULL_HITBOX.y,
+            SKULL_HITBOX.width,
+            SKULL_HITBOX.height
+            );    
+
+        uberResolve(room, this.hitBox, dir.x, dir.y);
+
+        this.sprite.x = this.hitBox.x - SKULL_HITBOX.x;
+        this.sprite.y = this.hitBox.y - SKULL_HITBOX.y;        
+
+        this.pushBack = Math.max(0, this.pushBack - ENEMY_PUSHBACK_STEP);
+    }
 
     switch (this.state) {
 
@@ -59,6 +84,7 @@ Skull.prototype.update = function(dt, wrestlerRoot) {
             wrestlerRoot.x - root.x,
             wrestlerRoot.y - root.y
             );
+
         dir.normalize();
         var moveSpeed = this.isTequila ? TEQUILA_MOVE_SPEED : SKULL_MOVE_SPEED;
         dir = dir.mulS(moveSpeed * dt / 1000);
@@ -131,6 +157,8 @@ Skull.prototype.handleInteractions = function(punchBox, hitBox) {
 
     if (punchBox) {
         if (rectIntersect(this.hitBox, punchBox)) {
+
+            this.pushBack = ENEMY_PUSHBACK_START;
 
             result.hit = true;
             --this.hp;

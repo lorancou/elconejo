@@ -41,6 +41,10 @@ function init() {
 		{src:"./assets/sfx/heartbeat0.ogg", id:"heartbeat0"},
 		{src:"./assets/sfx/heartbeat1.ogg", id:"heartbeat1"},
 		{src:"./assets/sfx/heartbeat2.ogg", id:"heartbeat2"},
+		{src:"./assets/sfx/music.ogg", id:"music"},
+		{src:"./assets/sfx/punch.ogg", id:"punch"},
+		{src:"./assets/sfx/damage.ogg", id:"damage"},
+		{src:"./assets/sfx/hit.ogg", id:"hit"},
 	];
 	for (var i=0; i<ROOM_COUNT; ++i) {
 	    var zeroedId = zeroFill(i, 2);
@@ -119,6 +123,9 @@ function doneLoading() {
 	document.onkeydown = handleKeyDown;
 	document.onkeyup = handleKeyUp;
 
+	// start the music
+	createjs.SoundJS.play("music", createjs.SoundJS.INTERRUPT_NONE, 0, 0, -1, 0.4);
+
 	// start game loop
 	//createjs.Ticker.setInterval(window.requestAnimationFrame);
 	createjs.Ticker.useRAF = false;
@@ -129,10 +136,10 @@ function doneLoading() {
 function update(dt) {
 
 	// game objects updates
-	var InteractionResult = wrestler.update(dt, room);
+	var interacResult = wrestler.update(dt, room);
 	room.update(dt);
-	heart.update(dt, InteractionResult);
-	updateScoring(dt, heart, InteractionResult);
+	heart.update(dt, interacResult);
+	updateScoring(dt, heart, interacResult);
 	hud.update(dt, heart, score, multiplier);
 
 	draw();
@@ -171,14 +178,14 @@ function update(dt) {
 	}
 }
 
-function updateScoring(dt, heart, InteractionResult) {
+function updateScoring(dt, heart, interacResult) {
 
-	score += InteractionResult.score * multiplier;
+	score += interacResult.score * multiplier;
 
-	if (InteractionResult.hit && heart.beat) {
-		multiplier++;
-	} else if (InteractionResult.miss && !heart.beat) {
-		multiplier = Math.max(multiplier-1, 0);
+	if (interacResult.hit && heart.beat) {
+		multiplier += HIT_ON_BEAT_BONUS;
+	} else if (interacResult.miss && !heart.beat) {
+		multiplier = Math.max(multiplier - MISS_OFF_BEAT_MALUS, 1);
 	}
 }
 

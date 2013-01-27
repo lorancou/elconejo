@@ -134,7 +134,7 @@ Wrestler.prototype.update = function(dt, room) {
             this.punchBox = null;
 
             if (!this.punchHit) {
-                InteractionResult.miss = true;
+                wrestlerResult.miss = true;
             }
             this.punchHit = false; 
 
@@ -147,20 +147,28 @@ Wrestler.prototype.update = function(dt, room) {
     }
 
     if (this.invincibilityTimer > 0.0) {
-        wrestlerResult = room.handleInteractions(this.punchBox, null, this.punchCount);
+        var newResult = room.handleInteractions(this.punchBox, null, this.punchCount);
+        wrestlerResult.apply(newResult);
     } else {
-        wrestlerResult = room.handleInteractions(this.punchBox, this.hitBox, this.punchCount);        
+        var newResult = room.handleInteractions(this.punchBox, this.hitBox, this.punchCount);        
+        wrestlerResult.apply(newResult);
     }
 
 
     if (this.state == STATE_PUNCH && wrestlerResult.hit) {
         this.punchHit = true; // no miss
+
+        // SFX
+        createjs.SoundJS.play("hit");
     }
 
     // invincibility
     if (wrestlerResult.hp < 0) {
         this.invincibilityTimer = WRESTLER_INVICIBILITY_DURATION;
         this.sprite.gotoAndPlay("take_damage");
+
+        // SFX
+        createjs.SoundJS.play("damage");        
     } else {
         this.invincibilityTimer = Math.max(0.0, this.invincibilityTimer - dt);
     }
@@ -279,6 +287,9 @@ Wrestler.prototype.setState = function(state) {
         ++this.punchCount;
         var newAnim = "punch" + getDirSuffix(this.dir);
         this.sprite.gotoAndPlay(newAnim);
+
+        // SFX
+        createjs.SoundJS.play("punch");        
     } break;
 
     }

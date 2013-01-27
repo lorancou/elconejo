@@ -4,10 +4,12 @@
 
 // ms
 var HEARTBEAT_LEVELS = [
-	{ hpStart:  0, hpEnd:  40, delay: 2000, beat:  1500 }, 
-	{ hpStart: 41, hpEnd:  80, delay: 1500, beat:  1250 },
-	{ hpStart: 81, hpEnd: 120, delay: 1000, beat:  1000 },
+	{ hpStart:  0, hpEnd:  40, delay: 2000, beat:  1000 }, 
+	{ hpStart: 41, hpEnd:  80, delay: 1500, beat:  800 },
+	{ hpStart: 81, hpEnd: 120, delay: 1000, beat:  600 },
 ];
+var HIT_ON_BEAT_BONUS = 1;
+var MISS_OFF_BEAT_MALUS = 1;
 
 //**** Room control **********************************************************
 
@@ -56,13 +58,16 @@ var WRESTLER_PUNCHBOX = [
 
 //**** Los Skullos con un Sombrero y las Tequilas*****************************
 
-var SKULL_HP = 1;
+var ENEMY_PUSHBACK_START = 15;
+var ENEMY_PUSHBACK_STEP = 2;
+
+var SKULL_HP = 2;
 var SKULL_VALUE = 5;
 var SKULL_HEAL = 2;
 var SKULL_DAMAGE = 5;
 var SKULL_MOVE_SPEED = 64; //Vitesse en pixels par seconde.
 
-var TEQUILA_HP = 4;
+var TEQUILA_HP = 5;
 var TEQUILA_VALUE = 15;
 var TEQUILA_HEAL = 5;
 var TEQUILA_DAMAGE = 15;
@@ -104,5 +109,5 @@ var HEART_ANIMS = {
 	// start, end, next, frequency
 
 	delay: [ 0,  0, "delay", 1],
-	beat: [ 1,  6, false, 2],
+	beat: [ 1, 7, false, 2],
 };
