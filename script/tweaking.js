@@ -13,7 +13,7 @@ var SKULL_HP = 3;
 var SKULL_VALUE = 1;
 var SKULL_HEAL = 1;
 var SKULL_DAMAGE = 1;
-var SKULL_MOVE_SPEED = 112; //Vitesse en pixels par seconde.
+var SKULL_MOVE_SPEED = 160; //Vitesse en pixels par seconde.
 
 //**** Room control **********************************************************
 
@@ -59,6 +59,10 @@ var SKULL_ANIMS = {
 	run_rt: [ 8,  11, "run_rt", 5],
 	run_up: [ 12,  15, "run_up", 5],
 
+	punch_dw: [16, 19, false, 2],
+	punch_lf: [20, 23, false, 2],
+	punch_rt: [24, 27, false, 2],
+	punch_up: [28, 31, false, 2],
 };
 
 var SKULL_HITBOX = { x: 16, y: 32, width: 32, height: 32 };

@@ -12,7 +12,7 @@ var Skull = function(x, y) {
 
     this.hp = SKULL_HP;
 
-    var ss = new createjs.SpriteSheet({
+    this.sheet = new createjs.SpriteSheet({
         "frames": {
             "width": SKULL_SIZE,
             "height": SKULL_SIZE
@@ -21,18 +21,20 @@ var Skull = function(x, y) {
         "images": ["./assets/sprites/skull.png"]
     });
 
-    this.sprite = new createjs.BitmapAnimation(ss);
+    this.sprite = new createjs.BitmapAnimation(this.sheet);
     this.sprite.scaleY = this.sprite.scaleX = 1;
     this.sprite.x = this.x - SKULL_SIZE / 2;
     this.sprite.y = this.y - SKULL_SIZE / 2;
-    this.sprite.gotoAndPlay("run_dw");
+    //this.sprite.gotoAndPlay("run_dw");
                             
     this.hitBox = new createjs.Rectangle(
         this.sprite.x + SKULL_HITBOX.x,
         this.sprite.y + SKULL_HITBOX.y,
         SKULL_HITBOX.width,
         SKULL_HITBOX.height
-        );    
+        );
+
+    this.setState(STATE_RUN);
 
     return this;
 };
@@ -58,21 +60,48 @@ Skull.prototype.update = function(dt, wrestlerRoot) {
         dir.normalize();
         dir.mulS(SKULL_MOVE_SPEED * dt / 1000);
 
+        var newDir = null;
+        if (Math.abs(dir.x) > Math.abs(dir.y)) {
+            if (dir.x > 0) {
+                newDir = DIR_RT;
+            } else {
+                newDir = DIR_LF;
+            }
+        } else {
+            if (dir.y > 0) {
+                newDir = DIR_DW;
+            } else {
+                newDir = DIR_UP;
+            }
+        }
+        if (newDir != this.dir) {
+            this.dir = newDir;
+            this.setState(STATE_RUN);
+        }
+
+        this.hitBox = new createjs.Rectangle(
+            this.sprite.x + SKULL_HITBOX.x,
+            this.sprite.y + SKULL_HITBOX.y,
+            SKULL_HITBOX.width,
+            SKULL_HITBOX.height
+            );    
+
+        uberResolve(room, this.hitBox, dir.x, dir.y);
+
+        this.sprite.x = this.hitBox.x - SKULL_HITBOX.x;
+        this.sprite.y = this.hitBox.y - SKULL_HITBOX.y;
+    } break;
+
+    case STATE_PUNCH: {
+        // don't move on punch
+
+        var frameCount = this.sheet.getNumFrames(this.sprite.currentAnimation);
+        if (this.sprite.currentAnimationFrame >= frameCount-1) {
+            this.setState(STATE_RUN);
+        }
     } break;
 
     }
-
-    this.hitBox = new createjs.Rectangle(
-        this.sprite.x + SKULL_HITBOX.x,
-        this.sprite.y + SKULL_HITBOX.y,
-        SKULL_HITBOX.width,
-        SKULL_HITBOX.height
-        );    
-
-    uberResolve(room, this.hitBox, dir.x, dir.y);
-
-    this.sprite.x = this.hitBox.x - SKULL_HITBOX.x;
-    this.sprite.y = this.hitBox.y - SKULL_HITBOX.y;
 }
 
 Skull.prototype.setState = function(state) {
@@ -84,6 +113,11 @@ Skull.prototype.setState = function(state) {
         var newAnim = "run" + getDirSuffix(this.dir);
         this.sprite.gotoAndPlay(newAnim);
     } break;
+
+    case STATE_PUNCH: {
+        var newAnim = "punch" + getDirSuffix(this.dir);
+        this.sprite.gotoAndPlay(newAnim);
+    } break;    
 
     }
 }
@@ -105,9 +139,12 @@ Skull.prototype.handleInteractions = function(punchBox, hitBox) {
         }
     }
 
-    if (rectIntersect(this.hitBox, hitBox)) {
+    if (this.state == STATE_RUN) {
+        if (rectIntersect(this.hitBox, hitBox)) {
 
-        result.hp -= SKULL_DAMAGE;
+            result.hp -= SKULL_DAMAGE;
+            this.setState(STATE_PUNCH);
+        }
     }
 
     return result;
