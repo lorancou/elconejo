@@ -1,6 +1,6 @@
 "use strict";
 
-var SKULL_SIZE = 32; // 16*2
+var SKULL_SIZE = 64; // 32*2
 
 var Skull = function(x, y) {
 
@@ -9,6 +9,10 @@ var Skull = function(x, y) {
 
     this.dir = DIR_DW;
     this.state = STATE_RUN;
+
+    this.hp = SKULL_HP;
+
+    this.hitBox = null;
 
     var ss = new createjs.SpriteSheet({
         "frames": {
@@ -19,11 +23,11 @@ var Skull = function(x, y) {
         "images": ["./assets/sprites/skull.png"]
     });
 
-    this.anim = new createjs.BitmapAnimation(ss);
-    this.anim.scaleY = this.anim.scaleX = 1;
-    this.anim.x = this.x - SKULL_SIZE / 2;
-    this.anim.y = this.y - SKULL_SIZE / 2;
-    this.anim.gotoAndPlay("run_dw");
+    this.sprite = new createjs.BitmapAnimation(ss);
+    this.sprite.scaleY = this.sprite.scaleX = 1;
+    this.sprite.x = this.x - SKULL_SIZE / 2;
+    this.sprite.y = this.y - SKULL_SIZE / 2;
+    this.sprite.gotoAndPlay("run_dw");
                             
     return this;
 };
@@ -42,8 +46,15 @@ Skull.prototype.update = function(dt) {
 
     }
 
-    this.anim.x = this.x - SKULL_SIZE / 2;
-    this.anim.y = this.y - SKULL_SIZE / 2;
+    this.sprite.x = this.x - SKULL_SIZE / 2;
+    this.sprite.y = this.y - SKULL_SIZE / 2;
+
+    this.hitBox = new createjs.Rectangle(
+        this.sprite.x + SKULL_HITBOX.x,
+        this.sprite.y + SKULL_HITBOX.y,
+        SKULL_HITBOX.width,
+        SKULL_HITBOX.height
+        );    
 }
 
 Skull.prototype.setState = function(state) {
@@ -53,9 +64,45 @@ Skull.prototype.setState = function(state) {
 
     case STATE_RUN: {
         var newAnim = "run" + getDirSuffix(this.dir);
-        this.anim.gotoAndPlay(newAnim);
+        this.sprite.gotoAndPlay(newAnim);
     } break;
 
     }
+}
 
+Skull.prototype.handlePunch = function(punchBox) {
+
+    var punchStats = new FrameStats();
+
+    if (rectIntersect(this.hitBox, punchBox)) {
+
+        punchStats.hit = true;
+        --this.hp;
+
+        if (this.hp == 0) { // R.I.P.
+            punchStats.hp += SKULL_HEAL;
+            punchStats.score += SKULL_VALUE;
+        }
+    }
+
+    return punchStats;
+}
+
+Skull.prototype.draw = function(stage) {
+
+    stage.addChild(this.sprite);
+}
+
+Skull.prototype.debugDraw = function(g, stage) {
+
+    g.setStrokeStyle(1);
+    g.beginStroke(createjs.Graphics.getRGB(0,255,0));
+    g.drawRect(
+        this.hitBox.x,
+        this.hitBox.y,
+        this.hitBox.width,
+        this.hitBox.width
+        );
+    var s = new createjs.Shape(g);
+    stage.addChild(s);
 }

@@ -30,16 +30,21 @@ var Room = function(index) {
 
         for (var row=0; row<this.json.data[col].length; ++row) {
 
-            var x = col * ROOM_TILE_SIZE;
-            var y = row * ROOM_TILE_SIZE;
             switch (this.json.data[col][row][0]) {
             case ROOM_TILE_WALL:
             {
+                var x = col * ROOM_TILE_SIZE;
+                var y = row * ROOM_TILE_SIZE;
                 var newWall = new Wall(x, y);
                 this.walls.push(newWall);
                 this.wallsInAGrid[col][row] = newWall;
             } break;
-            case ROOM_TILE_SKULL: this.skulls.push(new Skull(x, y)); break;
+            case ROOM_TILE_SKULL:
+            {
+                var x = col * ROOM_TILE_SIZE + 16;
+                var y = row * ROOM_TILE_SIZE + 0;
+                this.skulls.push(new Skull(x, y)); break;
+            } break;
             }
         }
     }
@@ -56,31 +61,20 @@ Room.prototype.update = function(dt, wrestler) {
 
 Room.prototype.handlePunch = function(punchBox) {
 
-    var punchStats = new FrameStats(); 
+    var stats = new FrameStats(); 
 
     var i = this.skulls.length;
     while (i--) {
 
-        var hitBox = new createjs.Rectangle(
-            this.skulls[i].anim.x + SKULL_HITBOX.x,
-            this.skulls[i].anim.y + SKULL_HITBOX.y,
-            SKULL_HITBOX.width,
-            SKULL_HITBOX.height
-            );
-
-        if (rectIntersect(hitBox, punchBox)) {
-
-            var skull = this.skulls[i];
-            punchStats.hit = true; 
-            if (true) { // TODO: skull dead
-                this.skulls.splice(i, 1);
-                punchStats.hp += SKULL_HP_BONUS;
-                punchStats.score += SKULL_VALUE;
-            }
+        var skullStats = this.skulls[i].handlePunch(punchBox);
+        if (this.skulls[i].hp == 0) {
+            this.skulls.splice(i, 1);
         }
+
+        stats.apply(skullStats);
     }
 
-    return punchStats;
+    return stats;
 }
 
 Room.prototype.draw = function(stage) {
@@ -88,12 +82,15 @@ Room.prototype.draw = function(stage) {
     stage.addChild(this.bitmap);
 
     for (var i = 0; i<this.skulls.length; ++i) {
-        stage.addChild(this.skulls[i].anim);
+        this.skulls[i].draw(stage);
     }
 }
 
 Room.prototype.debugDraw = function(g, stage) {
 
+    for (var i = 0; i<this.skulls.length; ++i) {
+        this.skulls[i].debugDraw(g, stage);
+    }
     for (var i = 0; i<this.walls.length; ++i) {
         this.walls[i].debugDraw(g, stage);
     }

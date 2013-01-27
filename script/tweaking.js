@@ -9,8 +9,9 @@ var HEARTBEAT_LEVELS = [
 	{ hpStart: 81, hpEnd: 120, delay:  500, beat:  300 },
 ];
 
+var SKULL_HP = 3;
 var SKULL_VALUE = 1;
-var SKULL_HP_BONUS = 1;
+var SKULL_HEAL = 1;
 
 //**** Room control **********************************************************
 
@@ -51,11 +52,11 @@ var WRESTLER_PUNCHBOX = [
 var SKULL_ANIMS = {
 	// start, end, next, frequency
 
-	run_dw: [ 0,  1, "run_dw", 5],
-	run_lf: [ 0,  1, "run_lf", 5],
-	run_rt: [ 0,  1, "run_rt", 5],
-	run_up: [ 0,  1, "run_up", 5],
+	run_dw: [ 0,  3, "run_dw", 5],
+	run_lf: [ 4,  7, "run_lf", 5],
+	run_rt: [ 8,  11, "run_rt", 5],
+	run_up: [ 12,  15, "run_up", 5],
 
 };
 
-var SKULL_HITBOX = { x: 0, y: 0, width: 32, height: 32 };
+var SKULL_HITBOX = { x: 16, y: 32, width: 32, height: 32 };

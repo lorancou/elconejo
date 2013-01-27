@@ -121,16 +121,16 @@ function update(dt) {
 	var topLeft = getTopLeft(wrestler.hitBox);
 	var bottomRight = getBotRight(wrestler.hitBox);
 	if (topLeft.x < 0) {
-		room = new Room((room.index + 5)%4);
+		room = new Room((room.index + ROOM_COUNT - 1) % ROOM_COUNT);
 		wrestler.changeRoom(DIR_LF);
 	} else if (bottomRight.x > ROOM_WIDTH) {
-		room = new Room((room.index + 1)%4);
+		room = new Room((room.index + 1) % ROOM_COUNT);
 		wrestler.changeRoom(DIR_RT);
 	} else if (topLeft.y < 0) {
-		room = new Room((room.index + 5)%4);
+		room = new Room((room.index + ROOM_COUNT - 1) % ROOM_COUNT);
 		wrestler.changeRoom(DIR_UP);
 	} else if (bottomRight.y > ROOM_HEIGHT) {
-		room = new Room((room.index + 1)%4);
+		room = new Room((room.index + 1) % ROOM_COUNT);
 		wrestler.changeRoom(DIR_DW);
 	}	
 }
