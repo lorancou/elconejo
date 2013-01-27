@@ -1,0 +1,16 @@
+body, html {
+	margin: 			0;
+	padding: 			0;
+}
+
+@font-face {
+    font-family: 'm04_fatal_furyregular';
+    src: url('m04-webfont.eot');
+    src: url('m04-webfont.eot?#iefix') format('embedded-opentype'),
+         url('m04-webfont.woff') format('woff'),
+         url('m04-webfont.ttf') format('truetype'),
+         url('m04-webfont.svg#m04_fatal_furyregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}

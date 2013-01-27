@@ -9,25 +9,25 @@ var HUD = function() {
     this.bitmap = new createjs.Bitmap(imagePool["hud"]);
     this.bitmap.y = HUD_Y;
 
-	this.beatText = new createjs.Text("-", "bold 24px Arial", "#000000");
+	this.beatText = new createjs.Text("-", "24px m04_fatal_furyregular", "#000000");
 	this.beatText.maxWidth = HUD_WIDTH;
 	this.beatText.textAlign = "center";
 	this.beatText.x = 50;
 	this.beatText.y = HUD_Y + HUD_HEIGHT / 2 - 20;
 
-	this.hpText = new createjs.Text("-", "bold 24px Arial", "#000000");
+	this.hpText = new createjs.Text("-", "24px m04_fatal_furyregular", "#000000");
 	this.hpText.maxWidth = HUD_WIDTH;
 	this.hpText.textAlign = "center";
 	this.hpText.x = 120;
 	this.hpText.y = HUD_Y + HUD_HEIGHT / 2 - 20;
 
-	this.scoreText = new createjs.Text("-", "bold 24px Arial", "#000000");
+	this.scoreText = new createjs.Text("-", "24px m04_fatal_furyregular", "#000000");
 	this.scoreText.maxWidth = HUD_WIDTH;
 	this.scoreText.textAlign = "center";
 	this.scoreText.x = 320;
 	this.scoreText.y = HUD_Y + HUD_HEIGHT / 2 - 20;
 
-	this.multiplierText = new createjs.Text("-", "bold 24px Arial", "#000000");
+	this.multiplierText = new createjs.Text("-", "24px m04_fatal_furyregular", "#000000");
 	this.multiplierText.maxWidth = HUD_WIDTH;
 	this.multiplierText.textAlign = "center";
 	this.multiplierText.x = 590;
