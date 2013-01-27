@@ -11,6 +11,9 @@ var loadingInterval = 0;
 var stage;
 
 // Gameplay
+var gamestate;
+var bigbitmap;
+var bigtext;
 var heart;
 var score;
 var multiplier;
@@ -29,6 +32,7 @@ function init() {
 
 	var manifest = [
 		{src:"./assets/bg/hud.png", id:"hud"},
+		{src:"./assets/bg/title.png", id:"title"},
 		{src:"./assets/sprites/skull.png", id:"skull"},
 		{src:"./assets/sprites/tequila.png", id:"tequila"},
 		{src:"./assets/sprites/wrestler.png", id:"wrestler"},
@@ -61,7 +65,7 @@ function init() {
 	preload.installPlugin(createjs.SoundJS);
 	preload.loadManifest(manifest);
 
-	messageField = new createjs.Text("Loading", "bold 24px Arial", "#000000");
+	messageField = new createjs.Text("", "24px m04_fatal_furyregular", "#000000");
 	messageField.maxWidth = 1000;
 	messageField.textAlign = "center";
 	messageField.x = canvas.width / 2;
@@ -73,7 +77,7 @@ function init() {
 }
 
 function updateLoading() {
-	messageField.text = "Loading " + (preload.progress*100|0) + "%";
+	messageField.text = "Cargando... " + (preload.progress*100|0) + " por ciento!";
 	stage.clear();
 	stage.update();
 }
@@ -98,6 +102,19 @@ function handleImageLoadComplete(event) {
 }
 
 function doneLoading() {
+
+	gamestate = GAMESTATE_TITLE;
+
+    bigbitmap = new createjs.Bitmap(imagePool["title"]);
+
+	bigtext = new createjs.Text("Press any key\nto start!", "24px m04_fatal_furyregular", "#FFFFFF");
+	bigtext.textAlign = "center";
+	bigtext.x = 460;
+	bigtext.y = 350;
+
+	stage.addChild(bigbitmap);
+	stage.addChild(bigtext);
+	stage.update();
 	
 	clearInterval(loadingInterval);
 
@@ -134,6 +151,10 @@ function doneLoading() {
 }
 
 function update(dt) {
+
+	if (gamestate == GAMESTATE_TITLE) {
+		return;
+	}
 
 	// game objects updates
 	var interacResult = wrestler.update(dt, room);
@@ -191,6 +212,10 @@ function updateScoring(dt, heart, interacResult) {
 
 function draw() {
 
+	if (gamestate == GAMESTATE_TITLE) {
+		return;
+	}
+
 	room.draw(stage);
 	wrestler.draw(stage);
 	hud.draw(stage);
@@ -211,6 +236,11 @@ function handleKeyDown(e) {
 
 	//cross browser issues exist
 	if(!e){ var e = window.event; }
+
+	if (gamestate == GAMESTATE_TITLE) {
+		gamestate = GAMESTATE_PLAYING;
+	}
+
 	wrestler.handleKeyDown(e);
 }
 

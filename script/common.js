@@ -16,6 +16,11 @@ var STATE_IDLE = 0;
 var STATE_RUN = 1;
 var STATE_PUNCH = 2;
 
+var GAMESTATE_TITLE = 0;
+var GAMESTATE_PLAYING = 1;
+var GAMESTATE_VICTORY = 2;
+var GAMESTATE_DEFEAT = 3;
+
 function getDirSuffix(dir) {
 	switch (dir) {
 		case DIR_DW: return "_dw";

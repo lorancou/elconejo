@@ -9,7 +9,7 @@ var HEARTBEAT_LEVELS = [
 	{ hpStart: 81, hpEnd: 120, delay: 1000, beat:  600 },
 ];
 var HIT_ON_BEAT_BONUS = 1;
-var MISS_OFF_BEAT_MALUS = 1;
+var MISS_OFF_BEAT_MALUS = 3;
 
 //**** Room control **********************************************************
 
@@ -66,13 +66,13 @@ var SKULL_HP = 2;
 var SKULL_VALUE = 5;
 var SKULL_HEAL = 2;
 var SKULL_DAMAGE = 5;
-var SKULL_MOVE_SPEED = 64; //Vitesse en pixels par seconde.
+var SKULL_MOVE_SPEED = 80; //Vitesse en pixels par seconde.
 
 var TEQUILA_HP = 5;
 var TEQUILA_VALUE = 15;
 var TEQUILA_HEAL = 5;
 var TEQUILA_DAMAGE = 15;
-var TEQUILA_MOVE_SPEED = 48; //Vitesse en pixels par seconde.
+var TEQUILA_MOVE_SPEED = 64; //Vitesse en pixels par seconde.
 
 var SKULL_ANIMS = {
 	// start, end, next, frequency
