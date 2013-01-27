@@ -33,6 +33,8 @@ function init() {
 	var manifest = [
 		{src:"./assets/bg/hud.png", id:"hud"},
 		{src:"./assets/bg/title.png", id:"title"},
+		{src:"./assets/bg/defeat.png", id:"defeat"},
+		{src:"./assets/bg/victory.png", id:"victory"},
 		{src:"./assets/sprites/skull.png", id:"skull"},
 		{src:"./assets/sprites/tequila.png", id:"tequila"},
 		{src:"./assets/sprites/wrestler.png", id:"wrestler"},
@@ -152,7 +154,9 @@ function doneLoading() {
 
 function update(dt) {
 
-	if (gamestate == GAMESTATE_TITLE) {
+	if (gamestate == GAMESTATE_TITLE ||
+		gamestate == GAMESTATE_DEFEAT ||
+		gamestate == GAMESTATE_VICTORY) {
 		return;
 	}
 
@@ -197,6 +201,31 @@ function update(dt) {
 			wrestler.changeRoom(DIR_DW);
 		}
 	}
+
+	if (heart.hp == 0) {
+
+		gamestate = GAMESTATE_DEFEAT;
+
+	    bigbitmap = new createjs.Bitmap(imagePool["defeat"]);
+		stage.addChild(bigbitmap);
+		stage.update();
+
+	} else if (dungeon.checkVictory()) {
+
+		gamestate = GAMESTATE_VICTORY;
+
+	    bigbitmap = new createjs.Bitmap(imagePool["victory"]);
+
+		bigtext = new createjs.Text("Score: " + score, "24px m04_fatal_furyregular", "#FFFFFF");
+		bigtext.textAlign = "center";
+		bigtext.x = 320;
+		bigtext.y = 100;
+
+		stage.addChild(bigbitmap);
+		stage.addChild(bigtext);
+		stage.update();
+
+	}
 }
 
 function updateScoring(dt, heart, interacResult) {
@@ -205,14 +234,16 @@ function updateScoring(dt, heart, interacResult) {
 
 	if (interacResult.hit && heart.beat) {
 		multiplier += HIT_ON_BEAT_BONUS;
-	} else if (interacResult.miss && !heart.beat) {
+	} else if ((interacResult.miss || interacResult.hit) && !heart.beat) {
 		multiplier = Math.max(multiplier - MISS_OFF_BEAT_MALUS, 1);
 	}
 }
 
 function draw() {
 
-	if (gamestate == GAMESTATE_TITLE) {
+	if (gamestate == GAMESTATE_TITLE ||
+		gamestate == GAMESTATE_DEFEAT ||
+		gamestate == GAMESTATE_VICTORY) {
 		return;
 	}
 

@@ -255,7 +255,13 @@ Wrestler.prototype.handleKeyUp = function(e) {
 
         // punch
         case KEYCODE_PUNCH_1:
-        case KEYCODE_PUNCH_2: {
+        case KEYCODE_PUNCH_2: 
+        case 13: 
+        case 16: 
+        case 17: 
+        case 18: 
+        case 32: 
+            {
             if (this.invincibilityTimer == 0.0 &&
                 (this.state == STATE_RUN || this.state == STATE_IDLE)) {
                 this.setState(STATE_PUNCH);

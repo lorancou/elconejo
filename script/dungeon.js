@@ -115,3 +115,15 @@ Dungeon.prototype.goDown = function() {
 
     this.currentY++;
 }
+
+Dungeon.prototype.checkVictory = function() {
+
+    for (var i = 0; i<DUNGEON_SIZE; ++i) {
+        for (var j = 0; j<DUNGEON_SIZE; ++j) {
+            if (this.data[i][j].index>=0 && !this.data[i][j].cleared) {
+                return false;
+            }
+        }
+    }
+    return true;
+}
