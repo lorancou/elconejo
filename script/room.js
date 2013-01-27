@@ -3,6 +3,7 @@
 var ROOM_TILE_EMPTY = 0;
 var ROOM_TILE_WALL = 1;
 var ROOM_TILE_SKULL = 2;
+var ROOM_TILE_TEQUILA = 3;
 
 var ROOM_COL_COUNT = ROOM_WIDTH / ROOM_TILE_SIZE;
 var ROOM_ROW_COUNT = ROOM_HEIGHT / ROOM_TILE_SIZE;
@@ -41,7 +42,15 @@ var Room = function(roomInfo) {
                 if (!roomInfo.cleared) {
                     var x = col * ROOM_TILE_SIZE + 16;
                     var y = row * ROOM_TILE_SIZE + 0;
-                    this.skulls.push(new Skull(x, y)); break;
+                    this.skulls.push(new Skull(x, y, false)); break;
+                }
+            } break;
+            case ROOM_TILE_TEQUILA:
+            {
+                if (!roomInfo.cleared) {
+                    var x = col * ROOM_TILE_SIZE + 16;
+                    var y = row * ROOM_TILE_SIZE + 0;
+                    this.skulls.push(new Skull(x, y, true)); break;
                 }
             } break;
             }

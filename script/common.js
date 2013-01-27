@@ -15,7 +15,6 @@ var DIR_UP = 3;
 var STATE_IDLE = 0;
 var STATE_RUN = 1;
 var STATE_PUNCH = 2;
-var STATE_TAKE_DAMAGE = 3;
 
 function getDirSuffix(dir) {
 	switch (dir) {

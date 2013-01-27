@@ -2,23 +2,25 @@
 
 var SKULL_SIZE = 64; // 32*2
 
-var Skull = function(x, y) {
+var Skull = function(x, y, isTequila) {
 
     this.x = x;
     this.y = y;
 
+    this.isTequila = isTequila;
+
     this.dir = DIR_DW;
     this.state = STATE_RUN;
 
-    this.hp = SKULL_HP;
+    this.hp = isTequila ? TEQUILA_HP : SKULL_HP;
 
     this.sheet = new createjs.SpriteSheet({
         "frames": {
             "width": SKULL_SIZE,
             "height": SKULL_SIZE
         },
-        "animations": SKULL_ANIMS,
-        "images": ["./assets/sprites/skull.png"]
+        "animations": isTequila ? TEQUILA_ANIMS : SKULL_ANIMS,
+        "images": isTequila ? [imagePool["tequila"]] : [imagePool["skull"]]
     });
 
     this.sprite = new createjs.BitmapAnimation(this.sheet);
@@ -58,7 +60,8 @@ Skull.prototype.update = function(dt, wrestlerRoot) {
             wrestlerRoot.y - root.y
             );
         dir.normalize();
-        dir = dir.mulS(SKULL_MOVE_SPEED * dt / 1000);
+        var moveSpeed = this.isTequila ? TEQUILA_MOVE_SPEED : SKULL_MOVE_SPEED;
+        dir = dir.mulS(moveSpeed * dt / 1000);
 
         var newDir = null;
         if (Math.abs(dir.x) > Math.abs(dir.y)) {
@@ -133,8 +136,8 @@ Skull.prototype.handleInteractions = function(punchBox, hitBox) {
             --this.hp;
 
             if (this.hp == 0) { // R.I.P.
-                result.hp += SKULL_HEAL;
-                result.score += SKULL_VALUE;
+                result.hp += this.isTequila ? TEQUILA_HEAL : SKULL_HEAL;
+                result.score += this.isTequila ? TEQUILA_VALUE : SKULL_VALUE;
             }
         }
     }
@@ -143,7 +146,7 @@ Skull.prototype.handleInteractions = function(punchBox, hitBox) {
         if (hitBox) {
             if (rectIntersect(this.hitBox, hitBox)) {
 
-                result.hp -= SKULL_DAMAGE;
+                result.hp -= this.isTequila ? TEQUILA_DAMAGE : SKULL_DAMAGE;
                 this.setState(STATE_PUNCH);
             }
         }

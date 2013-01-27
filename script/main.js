@@ -30,12 +30,13 @@ function init() {
 	var manifest = [
 		{src:"./assets/bg/hud.png", id:"hud"},
 		{src:"./assets/sprites/skull.png", id:"skull"},
+		{src:"./assets/sprites/tequila.png", id:"tequila"},
 		{src:"./assets/sprites/wrestler.png", id:"wrestler"},
 		{src:"./assets/sprites/wall.png", id:"wall"},
 		{src:"./assets/sprites/rope_dw.png", id:"rope_dw"},
 		{src:"./assets/sprites/rope_lf.png", id:"rope_lf"},
 		{src:"./assets/sprites/rope_rt.png", id:"rope_rt"},
-		{src:"./assets/sprites/rope_up.png", id:"rope_up"},
+		{src:"./assets/sprites/heart.png", id:"heart"},
 	];
 	for (var i=0; i<ROOM_COUNT; ++i) {
 	    var zeroedId = zeroFill(i, 2);
@@ -98,6 +99,9 @@ function doneLoading() {
 	hud = new HUD();
 
 	// create a room
+	//var data = dungeon.getCurrentRoomData();
+	//data.index = 20;
+	//room = new Room(data);
 	room = new Room(dungeon.getCurrentRoomData());
 
 	// create our wrestler

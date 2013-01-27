@@ -30,7 +30,7 @@ var Wrestler = function() {
             "height": WRESTLER_SIZE
         },
         "animations": WRESTLER_ANIMS,
-        "images": ["./assets/sprites/wrestler.png"]
+        "images": [imagePool["wrestler"]]
     });
 
     this.sprite = new createjs.BitmapAnimation(this.sheet);
