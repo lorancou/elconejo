@@ -61,22 +61,22 @@ Room.prototype.update = function(dt) {
     }
 }
 
-Room.prototype.handlePunch = function(punchBox) {
+Room.prototype.handleInteractions = function(punchBox, hitBox) {
 
-    var stats = new FrameStats(); 
+    var result = new InteractionResult(); 
 
     var i = this.skulls.length;
     while (i--) {
 
-        var skullStats = this.skulls[i].handlePunch(punchBox);
+        var skullResult = this.skulls[i].handleInteractions(punchBox, hitBox);
         if (this.skulls[i].hp == 0) {
             this.skulls.splice(i, 1);
         }
 
-        stats.apply(skullStats);
+        result.apply(skullResult);
     }
 
-    return stats;
+    return result;
 }
 
 Room.prototype.draw = function(stage) {

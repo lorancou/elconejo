@@ -109,10 +109,10 @@ function doneLoading() {
 function update(dt) {
 
 	// game objects updates
-	var frameStats = wrestler.update(dt, room);
+	var InteractionResult = wrestler.update(dt, room);
 	room.update(dt);
-	heart.update(dt, frameStats);
-	updateScoring(dt, heart, frameStats);
+	heart.update(dt, InteractionResult);
+	updateScoring(dt, heart, InteractionResult);
 	hud.update(dt, heart, score, multiplier);
 
 	draw();
@@ -135,13 +135,13 @@ function update(dt) {
 	}	
 }
 
-function updateScoring(dt, heart, frameStats) {
+function updateScoring(dt, heart, InteractionResult) {
 
-	score += frameStats.score * multiplier;
+	score += InteractionResult.score * multiplier;
 
-	if (frameStats.hit && heart.beat) {
+	if (InteractionResult.hit && heart.beat) {
 		multiplier++;
-	} else if (frameStats.miss && !heart.beat) {
+	} else if (InteractionResult.miss && !heart.beat) {
 		multiplier = Math.max(multiplier-1, 0);
 	}
 }

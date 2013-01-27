@@ -12,7 +12,8 @@ var HEARTBEAT_LEVELS = [
 var SKULL_HP = 3;
 var SKULL_VALUE = 1;
 var SKULL_HEAL = 1;
-var SKULL_MOVE_SPEED = 64; //Vitesse en pixels par seconde.
+var SKULL_DAMAGE = 1;
+var SKULL_MOVE_SPEED = 112; //Vitesse en pixels par seconde.
 
 //**** Room control **********************************************************
 

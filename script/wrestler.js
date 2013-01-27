@@ -47,7 +47,7 @@ Wrestler.prototype.update = function(dt, room) {
     var newX = this.sprite.x;
     var newY = this.sprite.y;
 
-    var frameStats = new FrameStats();
+    var wrestlerResult = new InteractionResult();
 
     switch (this.state) {
 
@@ -76,7 +76,7 @@ Wrestler.prototype.update = function(dt, room) {
 
         if (this.sprite.currentAnimationFrame < 3) {
 
-            // detect hits
+            // detect hits & damage
             this.punchBox = new createjs.Rectangle(
                 this.sprite.x + WRESTLER_PUNCHBOX[this.dir].x,
                 this.sprite.y + WRESTLER_PUNCHBOX[this.dir].y,
@@ -84,18 +84,12 @@ Wrestler.prototype.update = function(dt, room) {
                 WRESTLER_PUNCHBOX[this.dir].height
                 );
 
-            var punchStats = room.handlePunch(this.punchBox);
-            if (punchStats.hit) {
-                this.punchHit = true; // no miss
-            }
-            frameStats.apply(punchStats); 
-
         } else {
 
             this.punchBox = null;
 
             if (!this.punchHit) {
-                frameStats.miss = true;
+                InteractionResult.miss = true;
             }
             this.punchHit = false; 
 
@@ -106,6 +100,16 @@ Wrestler.prototype.update = function(dt, room) {
     } break;
 
     }
+
+
+
+    wrestlerResult = room.handleInteractions(this.punchBox, this.hitBox);
+    if (this.state == STATE_PUNCH && wrestlerResult.hit) {
+        this.punchHit = true; // no miss
+    }
+
+
+
 
     this.hitBox = new createjs.Rectangle(
         this.sprite.x + WRESTLER_HITBOX.x,
@@ -122,7 +126,7 @@ Wrestler.prototype.update = function(dt, room) {
     room.wrestlerRoot.x = this.hitBox.x + this.hitBox.width / 2;
     room.wrestlerRoot.y = this.hitBox.y + this.hitBox.height / 2; 
 
-    return frameStats;
+    return wrestlerResult;
 }
 
 Wrestler.prototype.draw = function(stage) {

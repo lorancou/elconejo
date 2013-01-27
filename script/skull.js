@@ -88,22 +88,29 @@ Skull.prototype.setState = function(state) {
     }
 }
 
-Skull.prototype.handlePunch = function(punchBox) {
+Skull.prototype.handleInteractions = function(punchBox, hitBox) {
 
-    var punchStats = new FrameStats();
+    var result = new InteractionResult();
 
-    if (rectIntersect(this.hitBox, punchBox)) {
+    if (punchBox) {
+        if (rectIntersect(this.hitBox, punchBox)) {
 
-        punchStats.hit = true;
-        --this.hp;
+            result.hit = true;
+            --this.hp;
 
-        if (this.hp == 0) { // R.I.P.
-            punchStats.hp += SKULL_HEAL;
-            punchStats.score += SKULL_VALUE;
+            if (this.hp == 0) { // R.I.P.
+                result.hp += SKULL_HEAL;
+                result.score += SKULL_VALUE;
+            }
         }
     }
 
-    return punchStats;
+    if (rectIntersect(this.hitBox, hitBox)) {
+
+        result.hp -= SKULL_DAMAGE;
+    }
+
+    return result;
 }
 
 Skull.prototype.draw = function(stage) {

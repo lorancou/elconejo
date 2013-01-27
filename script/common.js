@@ -98,14 +98,14 @@ function assert(cond) {
 	}
 }
 
-var FrameStats = function() {
+var InteractionResult = function() {
 	this.hp = 0;
 	this.score = 0;
 	this.hit = false;
 	this.miss = false;
 }
 
-FrameStats.prototype.apply = function(other) {
+InteractionResult.prototype.apply = function(other) {
 	this.hp += other.hp;
 	this.score += other.score;
 	this.hit = this.hit || other.hit;
