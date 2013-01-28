@@ -14,6 +14,8 @@ Music by OctoEntandre ("Ethan's Western Theme"): http://octoentandre.newgrounds.
 Global Game Jam 2013 project page: http://globalgamejam.org/2013/el-conejo  
 Sources on GitHub: https://github.com/lorancou/elconejo  
 
+Play here: http://lorancou.free.fr/bulk/elconejo  
+
 License - Software
 --------------------------------------------------------------------------------
 
