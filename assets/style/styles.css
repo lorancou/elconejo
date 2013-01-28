@@ -3,6 +3,22 @@ body, html {
 	padding: 			0;
 }
 
+div#main {
+    width: 640px;
+    height: 640px;
+    position: absolute;
+    top:0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+}
+
+p#credits {
+    font-size: 12px;
+	font-family: 'm04_fatal_furyregular';
+}
+
 @font-face {
     font-family: 'm04_fatal_furyregular';
     src: url('m04-webfont.eot');
