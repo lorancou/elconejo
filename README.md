@@ -2,11 +2,17 @@ El Conejo
 ================================================================================
 
 Copyright (c) 2013
-Thomas Constantin, Laurent Couvidou, Hervé Valentino, Florian Dufour  .
+Thomas Constantin, Laurent Couvidou, Hervé Valentino, Florian Dufour.
 
-Music by OctoEntandre ("Ethan's Western Theme"): http://octoentandre.newgrounds.com
-Global Game Jam 2013 project page: http://globalgamejam.org/2013/el-conejo
-Sources on GitHub: https://github.com/lorancou/elconejo
+The great wrestler El Conejo loves to fight... A LOT. He loves that so much that
+it is what makes his heart beat. By killing his enemies, his heartbeats faster,
+by being hit by them, it decreases. Attacking in rhythm with the heartbeat
+increases the score multiplier! Navigate to different rings to find the exit and
+access to the next level.
+
+Music by OctoEntandre ("Ethan's Western Theme"): http://octoentandre.newgrounds.com  
+Global Game Jam 2013 project page: http://globalgamejam.org/2013/el-conejo  
+Sources on GitHub: https://github.com/lorancou/elconejo  
 
 License - Software
 --------------------------------------------------------------------------------
