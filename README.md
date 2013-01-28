@@ -1,9 +1,12 @@
 El Conejo
 ================================================================================
 
-Copyright (c) 2013  
-Thomas Constantin, Laurent Couvidou, Hervé Valentino, Florian Dufour  
-Music by OctoEntandre "Ethan's Western Theme" http://octoentandre.newgrounds.com
+Copyright (c) 2013
+Thomas Constantin, Laurent Couvidou, Hervé Valentino, Florian Dufour  .
+
+Music by OctoEntandre ("Ethan's Western Theme"): http://octoentandre.newgrounds.com
+Global Game Jam 2013 project page: http://globalgamejam.org/2013/el-conejo
+Sources on GitHub: https://github.com/lorancou/elconejo
 
 License - Software
 --------------------------------------------------------------------------------

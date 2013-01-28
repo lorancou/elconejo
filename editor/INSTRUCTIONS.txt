@@ -1,0 +1,8 @@
+1- Lancer "mongoose-3.6.exe"
+2- Ouvrir Chrome
+3- Accéder à http://localhost:8080/
+4- Faire la map
+5- Cliquer sur "EXPORT"
+6- Enregistrer le fichier JSON
+7- ???
+6- PROFIT
